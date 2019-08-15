@@ -13,11 +13,11 @@ var db = mongoUtil.getDb();
 var nodemailer = require('nodemailer');
 var upload = require('express-fileupload');
 router.use(upload())
-
+var path = require('path');
+var whichRoute;
 /* GET home page. */
 router.get('/', ensureAuthenticated, function (req, res, next) {
   //Andre, these commands might be of use, with the file path issue w/nodemailer
-  console.log(__dirname); //returns the current working directory
   //console.log(process.pwd()); //returns the directory that Node is executed from a
   res.render('apply')
   //hello();
@@ -34,7 +34,8 @@ router.post('/', ensureAuthenticated, function (req, res, next) {
   if (req.files) {
     file = req.files.transcript;
     filename = file.name;
-    file.mv("./upload/" + filename, function(err) {
+    var myPath = path.join(__dirname, '../upload/' + filename);
+    file.mv(myPath, function(err) {
       if (err) {
         console.log(err)
       } else {
@@ -59,14 +60,15 @@ router.post('/', ensureAuthenticated, function (req, res, next) {
       subject: 'Applying for Tutor',
       attachments: [{
         filename: filename,
-        path: 'C:\\OfficialNoteLink\\Peersity\\upload\\' + filename
+        path: myPath
       }],
       text: 'Class request: ' + req.body.ApplyForClass + "\n"
             + 'Response: ' + req.body.Question + "\n"
             + 'Email: ' + req.body.Email + "\n"
     }
     console.log(mailOptions.attachments.path);
-    console.log(__dirname + '../upload')
+    console.log(__dirname);
+    console.log(myPath)
     console.log()
       //To do #2: Create a function somewhere in this 'post'
       //that checks the validity of the email in the database, before sending it.
@@ -78,6 +80,8 @@ router.post('/', ensureAuthenticated, function (req, res, next) {
           return console.log(error);
         } else {
             console.log(info)
+            db.collection('DefaultUser').update({_id: req.user._id}, {$set: {hasApplied: true}});
+            res.redirect('/home')
         }
 
         // console.log('Message sent: %s', info.messageId);
@@ -88,18 +92,23 @@ router.post('/', ensureAuthenticated, function (req, res, next) {
     //END of nodemailer
   } else {
     console.log("No file submitted")
+    res.redirect('/apply');
   }
 
 
       req.flash('success', 'Tutor status: pending');
-      res.redirect('/apply');
+
 
 })
 
 function ensureAuthenticated(req, res, next) {
+  if (req.user.hasApplied) {
+    res.redirect('/home')
+  }
  if(req.isAuthenticated()){
   return next();
  }
+
  res.redirect('/users/login');
 }
 module.exports = router;

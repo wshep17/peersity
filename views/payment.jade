@@ -9,7 +9,7 @@ html(lang='en')
         link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js')
 
-        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
         link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 
@@ -41,7 +41,7 @@ html(lang='en')
                         if user
                             if user.isAdmin
                                 li
-                                    a.nav-link(href='/admin',style="padding-left: 20px") Admin 
+                                    a.nav-link(href='/admin',style="padding-left: 20px") Admin
                         if !user
                             li
                                 a.nav-link(href='users/register',style="padding-left: 20px") Register
@@ -55,40 +55,40 @@ html(lang='en')
     .container
         .container-wrap.per
             .form-controls__steps 1/4
-            |     
+            |
             nav.form-controls
               a.form-controls__prev.form-controls--hidden(href='')
                 svg(width='19', height='32', viewbox='0 0 19 32', xmlns='http://www.w3.org/2000/svg')
                   title next
                   path(fill='#ffffff', d='M5.657 15.556L18.385 2.828 15.555 0 0 15.556l15.556 15.557 2.83-2.83', fill-rule='evenodd')
-              |       
+              |
               a.form-controls__next.form-controls--hidden(href='')
                 svg(width='19', height='32', viewbox='0 0 19 32', xmlns='http://www.w3.org/2000/svg')
                   title prev
                   path(fill='#ffffff', d='M12.727 15.556L0 2.828 2.828 0l15.557 15.556L2.828 31.113 0 28.283', fill-rule='evenodd')
-            |     
+            |
             form#cardForm(action='/', method='post')
               .field-container
                 label.hosted-field--label(for='card-number')
                   | Card Number
-                |         
+                |
                 #card-number.hosted-field
-              |       
+              |
               .field-container.field-container--hidden
                 label.hosted-field--label(for='expiration-date')
                   | Exp (MM/YY)
-                |         
+                |
                 #expiration-date.hosted-field
-              |       
+              |
               .field-container.field-container--hidden
                 label.hosted-field--label(for='cvv')
                   | CVV
-                |         
+                |
                 #cvv.hosted-field
-              |       
+              |
               .field-container.field-container--hidden.field-container--button
                 input#button-pay(type='submit', value='Pay')
-            |     
+            |
             .form-info
               p.field-message Let&apos;s add your card number.
 
@@ -126,7 +126,7 @@ html(lang='en')
             if (!$(formItems[currentFormItem + 1]).find('.hosted-field').hasClass('hosted-field')) {
               $('.form-controls__next').addClass('form-controls--hidden');
             }
-            
+
             $('.form-controls__prev').addClass('form-controls--back');
           }
 
@@ -311,16 +311,16 @@ html(lang='en')
                   }
                   var URL = 'http://localhost:6969/payment';
                   var obj = {
-                    'paymentMethodNonce': payload.nonce 
+                    'paymentMethodNonce': payload.nonce
                   }
                   $.ajax({
-                      url: URL, 
-                      type: "POST", 
+                      url: URL,
+                      type: "POST",
                       data: JSON.stringify(obj),
                       contentType: "application/json",
                       success: function() {
                         console.log("WORKS")
-                      }, 
+                      },
                       error: function() {
                           console.log("NOT QUITE ;)")
                       }
@@ -341,7 +341,6 @@ html(lang='en')
         != messages()
     block content
 
-        
+
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
         script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
-

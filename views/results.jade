@@ -9,7 +9,7 @@ html(lang='en')
 		link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
 		script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js')
 
-		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js')
+		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
 		link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
 		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 
@@ -55,7 +55,7 @@ html(lang='en')
 					h5.card-title Math 1554
 					p.card-text Your Question: What does it mean for something to be row equivalent?
 				.card-footer
-					a.btn.btn-primary(id = 'enter', href='/chat', style="background-color: green; border-color: green; text-align: center", class="w3-lobster") Enter           
+					a.btn.btn-primary(id = 'enter', href='/chat', style="background-color: green; border-color: green; text-align: center", class="w3-lobster") Enter
 
 
 
@@ -81,7 +81,7 @@ html(lang='en')
 
 		function activateNotification() {
 			document.getElementById('popup').style.display = "block";
-		} 
+		}
 		var socket = io.connect('http://localhost:6969');
 
 		//When you click a tutor's name, make entire page disappear-Socket connection will end if page refreshes.
@@ -97,8 +97,8 @@ html(lang='en')
 						room: roomNumber
 					};
 					$.ajax({
-						url: URL, 
-						type: "POST", 
+						url: URL,
+						type: "POST",
 						data: JSON.stringify(obj),
 						contentType: "application/json",
 						success: function() {
@@ -114,7 +114,7 @@ html(lang='en')
 								activateNotification()
 							})
 							console.log('The AJAX is working as intended')
-						}, 
+						},
 						error: function() {
 							console.log("CMON! nabbit, ya gotta issue with ur ajax request")
 						}
@@ -124,16 +124,15 @@ html(lang='en')
 		});
 
 		//When tutoree clicks "enter" they will go to the chat page(logic @button creation) and then he/she will
-		//remove that 'waiting_screen' for the tutor so that both users can chat. 
+		//remove that 'waiting_screen' for the tutor so that both users can chat.
 
 		var enter_button = document.getElementById('enter');
 		enter_button.addEventListener("click", function (event) {
 			socket.emit('enterChat', {
 				room: '#{user.room}'
 			})
-		})		
+		})
 	div.middleBottomDiv
 		form(method='get')
 			a(href='/findatutor')
 				button.middleBottomResults(type='button') Return to Find a Tutor
-
