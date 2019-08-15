@@ -1,0 +1,69 @@
+doctype html
+html(lang='en')
+    head
+        // Required meta tags
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        // Bootstrap CSS
+        link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+        script(src='javascripts/applyClient.js')
+        link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        script (src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js")
+        title Peersity
+
+        //Background Look
+        link(href='/stylesheets/background.css', rel='stylesheet')
+        link(href='/stylesheets/apply.css', rel='stylesheet')
+    body
+        nav.navbar.sticky-top.navbar-expand-md.bg-dark.navbar-dark
+            a.navbar-brand(href='/', class="w3-lobster") Peersity
+            button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNavDropdown', aria-controls='navbarNavDropdown', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            #navbarNavDropdown.navbar-collapse.collapse
+                div.mr-auto(style="width: 300px;")
+                    ul.navbar-nav
+                        li
+                            a.nav-link(href='/home',style="padding-left: 20px") Home
+                        li
+                            a.nav-link(href='/overview',style="padding-left: 20px") Overview
+
+                        if user
+                            if user.isAdmin
+                                li
+                                    a.nav-link(href='/admin',style="padding-left: 20px") Admin
+                        if !user
+                            li
+                                a.nav-link(href='users/register',style="padding-left: 20px") Register
+                            li
+                                a.nav-link(href='users/login',style="padding-left: 20px") Login
+                ul.navbar-nav
+                    if user
+                        li
+                            a.nav-link(href='users/logout',style="padding-left: 20px") Logout
+    .card.border-0.middle.shadow-lg.p-3.mb-5.rounded.under-nav(style='width: 25rem; height: 85%; text-align:center;')
+      div.logo_padding.bringDown
+       h2.page-header.h2Text Tutor Application
+       p(style='font-size: 14px;') Note: You can only submit one application per semester
+
+       form(method='post', action='/apply' style='text-align: center;' enctype='multipart/form-data')
+        .form-group
+        input(name='transcript', type='file', id='file')
+        label(for='file') Upload Transcript
+
+        .form-group
+        label.form-name Email
+        input.form-control.applyfields(name='Email', type='text')
+
+        .form-group
+        label.form-name Type the class(es) that you would like to tutor? (Please separate with a comma)
+        input.form-control.applyfields(name='ApplyForClass', type='text')
+
+        .form-group
+        label.form-name (Optional) Why do you want to become a tutor?
+        input.form-control.applyfields(name='Question', type='text')
+        .form-group
+        div.center
+          input.btn.btn-primary.buttons(type='submit', name='submit', value='Submit')

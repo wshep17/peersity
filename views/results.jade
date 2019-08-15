@@ -1,0 +1,139 @@
+doctype html
+html(lang='en')
+	head
+		// Required meta tags
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+
+		// Bootstrap CSS
+		link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
+		script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js')
+
+		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js')
+		link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
+		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+
+		//Background Look
+		link(href='/stylesheets/background.css', rel='stylesheet')
+		link(href='/stylesheets/slider.css', rel='stylesheet')
+		link(href='/stylesheets/home.css', rel='stylesheet')
+		link(href='/stylesheets/results_background.css', rel='stylesheet')
+
+		title Peersity
+
+
+	body
+		nav.navbar.sticky-top.navbar-expand-md.bg-dark.navbar-dark
+				a.navbar-brand(href='/', class="w3-lobster") Peersity
+				button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNavDropdown', aria-controls='navbarNavDropdown', aria-expanded='false', aria-label='Toggle navigation')
+					span.navbar-toggler-icon
+				#navbarNavDropdown.navbar-collapse.collapse
+					div.mr-auto(style="width: 300px;")
+						ul.navbar-nav
+							li
+								a.nav-link(href='/',style="padding-left: 20px") Home
+							li
+								a.nav-link(href='/overview',style="padding-left: 20px") Overview
+							if user
+								if user.isAdmin
+									li
+										a.nav-link(href='/admin',style="padding-left: 20px") Admin
+							if !user
+								li
+									a.nav-link(href='/users/register',style="padding-left: 20px") Register
+					ul.navbar-nav
+						li
+							a.fa.fa-instagram(href='https://www.instagram.com/peersity_/')
+						li
+							a.fa.fa-twitter(href='https://twitter.com/peersity')
+
+		div.shadow-lg.p-3.mb-5.rounded(id="popup", style = "display:none;")
+			.card.text-center
+				.card-header(style="background-color: lime; font-size: 30px; font-weight: 50px")
+						| You have been matched &#10071
+				.card-body(style="color: black;")
+					h5.card-title Math 1554
+					p.card-text Your Question: What does it mean for something to be row equivalent?
+				.card-footer
+					a.btn.btn-primary(id = 'enter', href='/chat', style="background-color: green; border-color: green; text-align: center", class="w3-lobster") Enter           
+
+
+
+	div(class= "the_results", style = "text-align: center;")
+				table.table.table-striped.table-dark
+					thead
+						tr
+							th(scope='col')
+							th(scope='col') Tutor
+							th(scope='col') Email
+					tbody
+						- var n = 0
+						for item in json
+								tr
+									td
+										button.btn.btn-primary.request_button_attributes(class = 'sendRequest', id='#{n++}' type = 'submit', value = '#{item.room}') Send Request
+									td #{item.name}
+									td #{item.email}
+
+
+	script(src="/socket.io/socket.io.js")
+	script.
+
+		function activateNotification() {
+			document.getElementById('popup').style.display = "block";
+		} 
+		var socket = io.connect('http://localhost:6969');
+
+		//When you click a tutor's name, make entire page disappear-Socket connection will end if page refreshes.
+		//Also join that tutors room, so that the tutor can send you information
+		$(document).ready(function() {
+			$('.sendRequest').each(function() {
+				console.log("what is going on")
+				$(this).click(function() {
+					$(".the_results").hide();
+					var roomNumber = $(this).attr('value');
+					var URL = 'http://localhost:6969/results/';
+					var obj = {
+						room: roomNumber
+					};
+					$.ajax({
+						url: URL, 
+						type: "POST", 
+						data: JSON.stringify(obj),
+						contentType: "application/json",
+						success: function() {
+							socket.emit('notify', {
+								room: roomNumber,
+								message: 'You have been requested',
+							})
+							socket.emit('subscribe', {
+								room: roomNumber,
+								name: '#{user.name}'
+							})
+							socket.on('notify', function(data) {
+								activateNotification()
+							})
+							console.log('The AJAX is working as intended')
+						}, 
+						error: function() {
+							console.log("CMON! nabbit, ya gotta issue with ur ajax request")
+						}
+					});
+				});
+			});
+		});
+
+		//When tutoree clicks "enter" they will go to the chat page(logic @button creation) and then he/she will
+		//remove that 'waiting_screen' for the tutor so that both users can chat. 
+
+		var enter_button = document.getElementById('enter');
+		enter_button.addEventListener("click", function (event) {
+			socket.emit('enterChat', {
+				room: '#{user.room}'
+			})
+		})		
+	div.middleBottomDiv
+		form(method='get')
+			a(href='/findatutor')
+				button.middleBottomResults(type='button') Return to Find a Tutor
+

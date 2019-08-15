@@ -1,0 +1,300 @@
+@import url(https://fonts.googleapis.com/css?family=Anonymous+Pro);
+
+
+.line-1{
+    position: relative;
+
+    width: 24em;
+    margin: 0 auto;
+    border-right: 5px solid rgba(255,255,255,.75);
+    font-size: 180%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+
+}
+
+
+.anim-typewriter{
+  animation: typewriter 3s steps(44) 1s 1 normal both,
+             blinkTextCursor 500ms steps(44) infinite normal;
+}
+@keyframes typewriter{
+  from{width: 0;}
+  to{width: 9.5em;}
+}
+@keyframes blinkTextCursor{
+  from{border-right-color: black}
+  to{border-right-color: transparent;}
+}
+.middleText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  text-decoration: none;
+  font-size: 50px;
+}
+
+body, html {
+  background-color:orange;
+  height: 100%;
+  color: black;
+}
+
+.parallax {
+
+  background-image: url('https://cdn.pixabay.com/photo/2016/11/08/05/20/adventure-1807524_1280.jpg');
+
+
+  height: 30%;
+
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.parallax2 {
+
+background-image: url('https://images.unsplash.com/photo-1500058504985-a3bbdb0a7781?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80');
+
+  height: 30%;
+
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.parallax3 {
+
+  background-image: url('https://images.unsplash.com/photo-1531496244015-67bec2b9952b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80');
+
+  height: 30%;
+
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.parallax4 {
+
+  background-image: url('https://images.unsplash.com/photo-1507209696998-3c532be9b2b5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80');
+
+  height: 40%;
+
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.overviewButton {
+    background-color: #ccc;
+    transition: transform .2s;
+    font-size: 20px;
+    border-radius: 5%;
+    border: 2px solid black;
+}
+
+.overviewButton:hover {
+  -ms-transform: scale(1.5); /* IE 9 /
+  -webkit-transform: scale(1.5); / Safari 3-8 */
+  transform: scale(1.5);
+  background-color: green;
+  border: green;
+  color: black;
+  border: 2px solid black;
+
+
+}
+ .button_attributes {
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: orange;
+    transition: transform .2s;
+    margin: 0 auto;
+    border: orange;
+}
+
+.button_attributes:hover {
+  -ms-transform: scale(1.5); /* IE 9 /
+  -webkit-transform: scale(1.5); / Safari 3-8 */
+  transform: scale(1.5);
+  opacity: .9;
+  background-color: yellow;
+  border: yellow;
+  color: gray;
+
+}
+ .middle {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #4ec2ed;
+}
+.goalsoverview {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background-color: #4ec2ed;
+}
+.welcomeoverview {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background-color: transparent;
+}
+
+.signupoverview {
+ top: 100%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background-color: transparent;
+}
+
+
+.slides {
+  display: flex;
+  overflow-x: auto;
+  border-radius: 5px;
+  scroll-behavior: smooth;
+}
+.slides::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.slides::-webkit-scrollbar-track {
+  background: transparent;
+}
+.slides > div {
+  flex-shrink: 0;
+  width: 100%;
+  height: 80vh;
+  border-radius: 10px;
+  background: #eee;
+  transform-origin: center center;
+  transition: transform 0.5s;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+  background-color: orange;
+}
+.slider > a {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: white;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 50%;
+  margin: 10px;
+  position: relative;
+}
+
+.btn {
+  border-radius: 10%;
+  background-color: #f1f1f1;
+  margin: 8px;
+  height: 10px;
+  width:15px;
+}
+
+.overviewText {
+  font-size: 100px;
+  border: 1px solid black;
+
+}
+.overviewP {
+  font-size: 50px;
+  border: 1px solid black;
+
+}
+#myDIV {
+  text-align: center;
+}
+
+/* Style the active class, and buttons on mouse-over */
+.active {
+  background-color: #000;
+}
+
+.btn:hover {
+  background-color: lightgray;
+}
+
+/* Don't need button navigation */
+@supports (scroll-snap-type) {
+  .slider > a {
+    display: none;
+  }
+}
+
+
+.w3-lobster {
+    font-family: "Lobster", serif;
+    font-size: 25px;
+}
+
+.sameSizeNav {
+    float: right;
+    border: 2px solid black;
+}
+
+.social {
+  color: white;
+  }
+
+.logo_padding {
+    padding: 100;
+}
+.padding {
+    padding: 8px;
+    text-align: center;
+}
+
+.fa {
+  padding: 20px;
+  font-size: 30px;
+  width: 50px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+}
+
+.fa-facebook {
+  background: transparent;
+  color: white;
+  font-size: 20px;
+}
+.fa-facebook:hover {
+    text-decoration: none;
+    color: gray;
+}
+
+.fa-twitter {
+  background: transparent;
+  color: white;
+  font-size: 20px;
+}
+.fa-twitter:hover {
+    text-decoration: none;
+    color: gray;
+}
+
+.fa-instagram {
+  background: transparent;
+  color: white;
+  font-size: 20px;
+}
+.fa-instagram:hover {
+    text-decoration: none;
+    color: gray;
+}

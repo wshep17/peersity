@@ -1,0 +1,148 @@
+ul.success li{
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    list-style: none;
+}
+
+.head {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.return {
+  position: fixed;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.prompt {
+  position: fixed;
+  top: 14%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.results {
+  position: fixed;
+  top: 20%;
+  left: 49%;
+  transform: translate(-50%, -50%);
+  font-weight: 300;
+  font-style: courier;
+}
+#add {
+    margin: 5px;
+}
+#button1 {
+    margin-top: 22%;
+
+
+    margin-left: 75px;
+    width : 200px;
+    padding: 10px;
+    border-radius: 10px;
+  	font-weight: bold;
+  	background-color: orange;
+  	transition: transform .2s;
+  	border: orange;
+
+}
+#button1:hover {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Safari 3-8 */
+  transform: scale(1.5);
+  opacity: .9;
+  background-color: yellow;
+  border: yellow;
+  color: gray;
+}
+#button2 {
+  margin-top: 22%;
+    margin-left: 40px;
+    width : 200px;
+    padding: 10px;
+    border-radius: 10px;
+  	font-weight: bold;
+  	background-color: orange;
+  	transition: transform .2s;
+  	border: orange;
+}
+#button2:hover {
+
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Safari 3-8 */
+  transform: scale(1.5);
+  opacity: .9;
+  background-color: yellow;
+  border: yellow;
+  color: gray;
+}
+#button3 {
+    margin: 5px;
+    width : 200px;
+    float: left;
+}
+#button4 {
+    margin: 5px;
+    width : 500px;
+    background-color: green;
+    border-color: green;
+}
+
+#button5 {
+    margin: 5px;
+    width : 500px;
+    background-color: red;
+    border-color: red;
+}
+#button6 {
+    margin: 5px;
+    width : 300px;
+    background-color: green;
+    border-color: green;
+}
+
+#button7 {
+    margin: 5px;
+    width : 300px;
+    background-color: orange;
+    border-color: orange;
+}
+
+#magic {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -300px;
+}
+ul.error li{
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    list-style: none;
+}
+.social {
+  border-radius: 50%;
+  background-color: blue;
+  float: right;
+}
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+#space {
+  width: 50%;
+}

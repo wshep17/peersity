@@ -1,0 +1,72 @@
+.under-nav {
+  padding: 30px;
+}
+
+.buttons {
+  background-color: ;
+  border-radius: 6px;
+	color:white;
+	font-weight: bold;
+	font-size: 17px;
+	outline: none;
+	cursor:pointer;
+  transition: transform .2s;
+    margin-bottom: 5px;
+}
+.buttons:hover {
+  -ms-transform: scale(1.1); /* IE 9 */
+  -webkit-transform: scale(1.1); /* Safari 3-8 */
+  transform: scale(1.1);
+  opacity: .8;
+  background-color: #16a032;
+  border: #16a032;
+  margin-bottom: 6.5px;
+}
+.buttons-red {
+  background-color: ;
+  border-radius: 6px;
+	color:white;
+	font-weight: bold;
+	font-size: 17px;
+	outline: none;
+	cursor:pointer;
+  transition: transform .2s;
+  margin-bottom: 5px;
+}
+.buttons-red:hover {
+  -ms-transform: scale(1.1); /* IE 9 */
+  -webkit-transform: scale(1.1); /* Safari 3-8 */
+  transform: scale(1.1);
+  opacity: .8;
+  background-color: #bc0b0b;
+  border: #bc0b0b;
+  margin-bottom: 6.5px;
+}
+
+.adminh2 {
+  color: white;
+}
+.done {
+  width: 100px;
+  height: 50px;
+  float: right;
+	border-radius: 8px;
+	color:white;
+	font-weight: bold;
+	font-size: 17px;
+	outline: none;
+	cursor:pointer;
+  margin: 40px;
+
+  transition: transform .2s;
+}
+.done:hover {
+
+  -ms-transform: scale(1.1); /* IE 9 */
+  -webkit-transform: scale(1.1); /* Safari 3-8 */
+  transform: scale(1.1);
+  opacity: .8;
+  background-color: #16a032;
+  border: #16a032;
+  color: white;
+}

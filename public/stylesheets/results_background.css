@@ -1,0 +1,152 @@
+body {
+ background-color:  #1D1C22;
+ background-repeat: no-repeat;
+ background-position: 50% 30%;
+ background-attachment: fixed;
+ }
+
+.button_attributes {
+  margin-top: 52%;
+	border-radius: 10px;
+	font-weight: bold;
+	background-color: orange;
+	transition: transform .2s;
+	margin: 0 auto;
+	border: orange;
+}
+
+.button_attributes:hover {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Safari 3-8 */
+  transform: scale(1.5);
+  opacity: .9;
+  background-color: yellow;
+  border: yellow;
+  color: gray;
+}
+.middleBottomDiv {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   color: white;
+   text-align: center;
+}
+
+.middleBottomResults {
+   width: 100%;
+   background-color: #4ec2ed;
+   border-color:  #4ec2ed;
+}
+
+.middleBottomResults:hover {
+  background-color: red;
+  border: red;
+  color: white;
+}
+.loginbutton_attributes {
+  border-radius: 10px;
+  font-weight: bold;
+  background-color: orange;
+  transition: transform .2s;
+  margin: 0 auto;
+  border: orange;
+  opacity: .9;
+}
+
+.request_button_attributes:hover {
+/*  -ms-transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5);*/
+  opacity: 1;
+  background-color: green;
+  border: orange;
+}
+
+.request_button_attributes {
+  border-radius: 10px;
+  font-weight: bold;
+  background-color: green;
+  transition: transform .2s;
+  margin: 0 auto;
+  border: green;
+  opacity: .9;
+}
+
+.loginbutton_attributes:hover {
+/*  -ms-transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5);*/
+  opacity: 1;
+  background-color: green;
+  border: green;
+}
+
+ .middle {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #4ec2ed;
+}
+
+.w3-lobster {
+	font-family: "Lobster", serif;
+	font-size: 25px;
+}
+
+.sameSizeNav {
+	float: right;
+	border: 2px solid black;
+}
+
+.social {
+  color: white;
+  }
+
+.logo_padding {
+	padding: 100;
+}
+.padding {
+	padding: 8px;
+	text-align: center;
+}
+
+.fa {
+  padding: 20px;
+  font-size: 30px;
+  width: 50px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+}
+
+.fa-facebook {
+  background: transparent;
+  color: white;
+  font-size: 20px;
+}
+.fa-facebook:hover {
+	text-decoration: none;
+	color: gray;
+}
+
+.fa-twitter {
+  background: transparent;
+  color: white;
+  font-size: 20px;
+}
+.fa-twitter:hover {
+	text-decoration: none;
+	color: gray;
+}
+
+.fa-instagram {
+  background: transparent;
+  color: white;
+  font-size: 20px;
+}
+.fa-instagram:hover {
+	text-decoration: none;
+	color: gray;
+}

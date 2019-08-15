@@ -1,0 +1,13 @@
+extends layout
+
+block content
+ h2.page-header Class Search
+ p Please search for classes below
+ form(method='post', action='/search')
+  .form-group
+   label Class Name:
+   input.form-control(name='coursename', type='text', placeholder='ex. CS 1331')
+  input.btn.btn-primary(type='submit', name='submit',value='Add', id='add')
+
+
+

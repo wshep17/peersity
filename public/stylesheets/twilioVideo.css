@@ -1,0 +1,86 @@
+div#top-div {
+  position: relative;
+  height: 45vh;
+  width: 100%;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  margin: auto;
+
+}
+
+
+div#bottom-div {
+  height: 45vh;
+  width: 100%;
+  border: 1px solid #aaa;
+  overflow-y: scroll;
+  background-color: #aaa;
+
+}
+
+div#top-div video {
+  position: absolute;
+
+  width: 50%;
+  height: 45vh;
+  left: 25%;
+}
+
+div#selfie-media video {
+  position: absolute;
+  width: 20%;
+  
+  left: 0;
+  bottom: 0;
+  height: 100px;
+}
+
+#verticalText {
+  writing-mode:vertical-rl;
+    background-color: #aaa;
+    font-family: bold;
+    text-align: center;
+    font-size: 12px;
+    white-space:nowrap;
+    display:block;
+    bottom:0;
+    width:35px;
+    height:100px;
+    border-radius: 3px;
+}
+
+#verticalText > p {
+  color: #fff;
+  font-family: bold;
+
+	font-size: 15px;
+}
+
+#slideout-menu {
+  position: fixed;
+  top: 40px;
+  left: 0;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+
+}
+#slideout_inner {
+  position: fixed;
+  height: 100px;
+  top: 40px;
+  left: -250px;
+  background: #aaa;
+  border: 2px solid #aaa;
+  border-radius: 3px;
+  text-align: center;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+
+#slideout-menu:hover #slideout_inner {
+  left: 0;
+}

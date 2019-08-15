@@ -1,0 +1,54 @@
+doctype html
+html(lang='en')
+    head
+        // Required meta tags
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        // Bootstrap CSS
+        link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+        link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        title Peersity
+
+        //Background Look
+        link(href='/stylesheets/background.css', rel='stylesheet')
+
+    body
+        nav.navbar.sticky-top.navbar-expand-md.bg-dark.navbar-dark
+            a.navbar-brand(href='/', class="w3-lobster") Peersity
+            button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNavDropdown', aria-controls='navbarNavDropdown', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            #navbarNavDropdown.navbar-collapse.collapse
+                div.mr-auto(style="width: 300px;")
+                    ul.navbar-nav
+                        if user
+
+                            li
+                                a.nav-link(href='/home',style="padding-left: 20px") Home
+                        li
+                            a.nav-link(href='/overview',style="padding-left: 20px") Overview
+                ul.navbar-nav
+                    li
+                        a.fa.fa-instagram(href='https://www.instagram.com/peersity_/')
+                    li
+                        a.fa.fa-twitter(href='https://twitter.com/peersity')
+
+      .card.border-0.middle(style='width: 18rem;')
+          div(class="logo_padding")
+              img.card-img-top(src='/stylesheets/Peersity_Logo.png', alt='...')
+          ul.list-group.list-group-flush
+              div(class="padding")
+                  a(href='/users/login')
+                      button.btn.btn-primary.button_attributes(type='button', style="width: 200px;") Login!
+              div(class = "padding")
+                  a(href='/users/register')
+                      button.btn.btn-primary.button_attributes(type='button', style="width: 200px;") Sign Up!
+
+
+
+
+        script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')

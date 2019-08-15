@@ -1,0 +1,135 @@
+doctype html
+html(lang='en',  id='HTML')
+    head
+        // Required meta tags
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+
+        // Bootstrap CSS
+        link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+        link(rel='stylesheet', href='/stylesheets/chat.css')
+        link(rel='stylesheet', href='/stylesheets/background.css')
+        link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(rel='stylesheet', href='/stylesheets/twilioVideo.css')
+
+        title Peersity
+
+
+
+    body
+        nav.navbar.sticky-top.navbar-expand-md.bg-dark.navbar-dark
+            a.navbar-brand(href='/', class="w3-lobster") Peersity
+            button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNavDropdown', aria-controls='navbarNavDropdown', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            #navbarNavDropdown.navbar-collapse.collapse
+                div.mr-auto(style="width: 300px;")
+                    ul.navbar-nav
+                        li
+                            a.nav-link(href='/home',style="padding-left: 20px") Home
+                        li
+                            a.nav-link(href='/overview',style="padding-left: 20px") Overview
+
+                        if user
+                            if user.isAdmin
+                                li
+                                    a.nav-link(href='/admin',style="padding-left: 20px") Admin
+                        if !user
+                            li
+                                a.nav-link(href='users/register',style="padding-left: 20px") Register
+                            li
+                                a.nav-link(href='users/login',style="padding-left: 20px") Login
+                ul.navbar-nav
+                    if user
+                        li
+                            a.nav-link(href='users/logout',style="padding-left: 20px") Logout
+
+    if (user.isRequested)        
+        div(id='waiting_screen', style = "display:block;")
+          .card.middleNote(style='width: 30rem; background-color: black;')
+            .card.text-center
+                .card-header(style="border-style: none; font-size: 20px; font-weight: 10px")
+                    | Your tutoree is on the way...
+                .card-body(style="border-style: none;")
+                    .spinner-border(style="color: black")
+
+        div(id='chatpage', style = "display:none;")
+            #top-div
+              #slideout-menu
+                div#verticalText
+                  p Settings
+                #slideout_inner
+                  #preview
+                    button#button-preview Preview My Camera
+                    button#stop-preview Stop Preview
+                  form(method='post', action='/chat', class='')
+                    input.btn.btn-primary(id='leave', type='submit', value = 'Leave')
+                  button#button-join Join Video Call
+                  button#button-leave Leave Video Call
+
+              #selfie-media
+
+            #bottom-div
+              div(id='chatpage')
+
+                div(id='joinedroom')
+                div(id='the-chat')
+
+                  div(id='chat-window')
+                    div(id='output')
+                      ul.chats(id ='ulId')
+                      // The chat messages will go here
+            #chatform
+              input(id='handle', type='text', value = user.name, style= 'width: 0px; visibility: hidden;')
+              input(id='message', type='text')
+              button(id='send' value='Send') Send
+            #controls
+
+    else 
+        div(id='chatpage', style = "display:block;")
+            #top-div
+              #slideout-menu
+                div#verticalText
+                  p Settings
+                #slideout_inner
+                  #preview
+                    button#button-preview Preview My Camera
+                    button#stop-preview Stop Preview
+                  form(method='post', action='/chat', class='')
+                    input.btn.btn-primary(id='leave', type='submit', value = 'Leave')
+                  button#button-join Join Video Call
+                  button#button-leave Leave Video Call
+
+              #selfie-media
+
+            #bottom-div
+              div(id='chatpage')
+
+                div(id='joinedroom')
+                div(id='the-chat')
+
+                  div(id='chat-window')
+                    div(id='output')
+                      ul.chats(id ='ulId')
+                      // The chat messages will go here
+            #chatform
+              input(id='handle', type='text', value = user.name, style= 'width: 0px; visibility: hidden;')
+              input(id='message', type='text')
+              button(id='send' value='Send') Send
+            #controls      
+
+    script(src="/socket.io/socket.io.js")
+    script.
+        var socket = io.connect('http://localhost:6969')
+        socket.emit('subscribe', {
+            room: #{user.room},
+            name: '#{user.name}'
+        })
+        socket.on('enterChat', function(data) {
+            document.getElementById('chatpage').style.display = "block";
+            document.getElementById('waiting_screen').style.display = "none";
+        })
+    script(src="/javascripts/chatClient.js")
+    script(src='/javascripts/bundle.js')

@@ -1,0 +1,279 @@
+/*----- VARIABLES -----*/
+
+$primary: #282828;
+$success: #4CAF50;
+$error: #f44336;
+$small-screen: 467px;
+$bouncy: cubic-bezier(.20, 1.3, .7, 1);
+
+/*----- GENERAL -----*/
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body,
+html {
+  overflow: hidden;
+  height: 100%;
+  background-color: $primary;
+  background: linear-gradient(185grad, darken($primary, 20%), $primary) ;
+  color: lighten($primary, 85%);
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 300;
+  
+  @media (max-width: $small-screen) {
+    font-size: 85%;
+  }
+}
+
+html {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  font-size: 2em;
+}
+
+
+/*----- POSITIONING -----*/
+
+.container {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  perspective: 100;
+  position: relative;
+  
+  @media (max-width: $small-screen) {
+    width: 90%;
+  }
+}
+
+#cardForm {
+  height: 5em;
+  width: 100%;
+  height: 5.5em;
+  margin-bottom: 1em;
+  position: relative;
+  transform: translateX(0em);
+}
+
+
+/*----- HF CONTAINERS -----*/
+
+.field-container {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #fff;
+  z-index: 2;
+  opacity: 1;
+  transition: all 500ms $bouncy;
+ -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transform-origin: bottom;
+  transition: transform 0.5s $bouncy, opacity 0.5s;
+  opacity: 1;
+}
+
+.field-container:nth-child(1) {
+  animation: inputIntro 0.5s $bouncy;
+}
+
+.field-container--hidden {
+  opacity: 0;
+  transform: translate(0em, 0em) rotateX(180deg);
+  z-index: -1;
+}
+
+.field-container--button {
+  border: 0;
+}
+
+.hosted-field {
+  height: 5.5em;
+  width: 100%;
+  display: block;
+  padding-left: 1em;
+}
+
+
+/*----- HF LABELS -----*/
+
+.hosted-field--label {
+  color: #FFF;
+  position: absolute;
+  top: 0.9em;
+  left: 0.5em;
+  transition: transform 0.2s $bouncy, color 0.2s;
+  transform-origin: 0 0;
+  font-size: 2em;
+  line-height: 1;
+}
+
+.hosted-field--label--moved,
+.not-empty {
+  transform: scale(0.8) translate(0em, -3em);
+  transition: transform 0.2s $bouncy, color 0.2s;
+  color: #fff;
+}
+
+
+/*----- HF MESSAGES -----*/
+
+.field-message {
+  font-size: 1em;
+  margin: 1em;
+  opacity: .3;
+  
+  @media (max-width: $small-screen) {
+    margin: 0;
+  }
+}
+
+.field-message--error {
+  color: $error;
+}
+
+
+/*----- HF SUBMIT -----*/
+
+#button-pay {
+  -webkit-appearance: none;
+  width: 100%;
+  border: 0;
+  text-align: center;
+  font-size: 2em;
+  padding: 0.9em;
+  color: #000;
+  background: #fff;
+  cursor: pointer;
+}
+
+
+/*----- HF CONTROLS -----*/
+
+.form-controls__steps {
+  font-size: 1.5em;
+  position: absolute;
+  right: 1em;
+  transform: translateY(-1.9em);
+  opacity: .3;
+}
+
+.form-controls {
+  position: absolute;
+  right: 0;
+  z-index: 5;
+  animation: arrowIntroScale 0.3s 0.4s $bouncy backwards;
+  transition: transform 0.3s $bouncy;
+  @media (max-width: $small-screen) {
+     right: 0.5em;
+  }
+  
+  a {
+    display: inline-block;
+    padding: 1em 0.5em;
+    transform: scale(0.8);
+    transition: transform 0.3s $bouncy;
+    
+    @media (max-width: $small-screen) {
+      padding: 0.7em 0.1em;
+      transform: scale(0.6);
+    }
+  }
+  a:hover {
+    transform: scale(0.9);
+    transition: transform 0.1s $bouncy;
+  }
+  .form-controls--hidden {
+    transform: scale(0);
+    transition: transform 0.3s $bouncy;
+  }
+  .form-controls--hidden:hover {
+    transform: scale(0);
+  }
+}
+.form-controls--back {
+  transition: transform 0.2s $bouncy;
+  transform: translateX(2em);
+}
+
+.form-controls--end {
+  transition: transform 0.2s $bouncy;
+  transform: translateY(-5em) translateX(-3.5em);
+}
+
+
+/*----- BT CLASSES -----*/
+
+.braintree-hosted-fields-valid {
+  background: rgba($success, 0.5);
+  animation: success 0.5s $bouncy;
+}
+
+.braintree-hosted-fields-invalid {
+  background: rgba($error, 0.5);
+  color: #fff;
+  animation: error 0.5s $bouncy;
+}
+
+
+/*----- ANIMATIONS -----*/
+
+@keyframes inputIntro {
+  0% {
+    transform: translate(0, 0.2em) rotateX(90deg) scale(0.9);
+  }
+  100% {
+    transform: translate(0, 0) rotateX(0) scale(1);
+  }
+}
+
+@keyframes arrowIntroScale {
+  0% {
+    transform: translate(-1em, 0) scale(0);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes error {
+  0% {
+    background: $primary;
+    transform: scale(1);
+  }
+  50% {
+    background: rgba($error, 1);
+    transform: scale(1.1);
+  }
+  100% {
+    background: rgba($error, 0.5);
+    transform: scale(1);
+  }
+}
+
+@keyframes success {
+  0% {
+    background: $primary;
+    transform: scale(1);
+  }
+  50% {
+    background: darken($success, 10%);
+    transform: scale(1.1);
+  }
+  100% {
+    background: rgba($success, 0.5);
+    transform: scale(1);
+  }
+}
+
+
+
