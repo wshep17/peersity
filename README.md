@@ -1,2 +1,2 @@
 # Peersity
-Tutoring Application
+Online-Demand Tutoring Application
