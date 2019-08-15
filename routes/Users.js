@@ -29,7 +29,7 @@ router.post('/login',
   function(req, res) {
    var user = req.user;
    console.log(user)
-   req.flash('success', 'You are now logged in');
+   //req.flash('success', 'You are now logged in');
    res.redirect('/home');
 });
 
@@ -130,7 +130,7 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
 router.get('/logout', function(req, res) {
   db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: false}});
   req.logout();
-  req.flash('success', 'You are now logged out');
+  //req.flash('success', 'You are now logged out');
   res.redirect('/users/login');
   db.collection('DefaultUser').update({_id: req.user._id}, {$set: {room: ""}});
 });
