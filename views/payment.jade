@@ -9,7 +9,7 @@ html(lang='en')
         link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js')
 
-        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js')
         link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 
@@ -17,7 +17,6 @@ html(lang='en')
         link(href='/stylesheets/background.css', rel='stylesheet')
         link(href='/stylesheets/slider.css', rel='stylesheet')
         link(href='/stylesheets/home.css', rel='stylesheet')
-        link(href='/stylesheets/payment.css', rel='stylesheet')
 
         //Socket Funcionality import
         script(src="/socket.io/socket.io.js")
@@ -41,7 +40,7 @@ html(lang='en')
                         if user
                             if user.isAdmin
                                 li
-                                    a.nav-link(href='/admin',style="padding-left: 20px") Admin
+                                    a.nav-link(href='/admin',style="padding-left: 20px") Admin 
                         if !user
                             li
                                 a.nav-link(href='users/register',style="padding-left: 20px") Register
@@ -53,294 +52,10 @@ html(lang='en')
                             a.nav-link(href='users/logout',style="padding-left: 20px") Logout
 
     .container
-        .container-wrap.per
-            .form-controls__steps 1/4
-            |
-            nav.form-controls
-              a.form-controls__prev.form-controls--hidden(href='')
-                svg(width='19', height='32', viewbox='0 0 19 32', xmlns='http://www.w3.org/2000/svg')
-                  title next
-                  path(fill='#ffffff', d='M5.657 15.556L18.385 2.828 15.555 0 0 15.556l15.556 15.557 2.83-2.83', fill-rule='evenodd')
-              |
-              a.form-controls__next.form-controls--hidden(href='')
-                svg(width='19', height='32', viewbox='0 0 19 32', xmlns='http://www.w3.org/2000/svg')
-                  title prev
-                  path(fill='#ffffff', d='M12.727 15.556L0 2.828 2.828 0l15.557 15.556L2.828 31.113 0 28.283', fill-rule='evenodd')
-            |
-            form#cardForm(action='/', method='post')
-              .field-container
-                label.hosted-field--label(for='card-number')
-                  | Card Number
-                |
-                #card-number.hosted-field
-              |
-              .field-container.field-container--hidden
-                label.hosted-field--label(for='expiration-date')
-                  | Exp (MM/YY)
-                |
-                #expiration-date.hosted-field
-              |
-              .field-container.field-container--hidden
-                label.hosted-field--label(for='cvv')
-                  | CVV
-                |
-                #cvv.hosted-field
-              |
-              .field-container.field-container--hidden.field-container--button
-                input#button-pay(type='submit', value='Pay')
-            |
-            .form-info
-              p.field-message Let&apos;s add your card number.
-
-        // Load the required client component.
-        script(src='https://js.braintreegateway.com/web/3.50.0/js/client.min.js')
-        // Load Hosted Fields component.
-        script(src='https://js.braintreegateway.com/web/3.50.0/js/hosted-fields.min.js')
-        script.
-
-          var form = document.querySelector('#cardForm');
-
-          // Input switcher
-          var formItems = [];
-          var currentFormItem = 0;
-
-          $('.field-container').each(function() {
-            formItems.push(this);
-          })
-
-          // Add the functionality for what happens when people will click on next
-          function formControlNext() {
-            $(formItems[currentFormItem]).addClass('field-container--hidden');
-            $(formItems[currentFormItem + 1]).removeClass('field-container--hidden');
-
-            currentFormItem = currentFormItem + 1;
-            checkFormVisibility();
-            changeStepperNumber();
-
-            hideNext();
-
-            return false;
-          }
-
-          function hideNext() {
-            if (!$(formItems[currentFormItem + 1]).find('.hosted-field').hasClass('hosted-field')) {
-              $('.form-controls__next').addClass('form-controls--hidden');
-            }
-
-            $('.form-controls__prev').addClass('form-controls--back');
-          }
-
-          function formControlPrev() {
-            $(formItems[currentFormItem]).addClass('field-container--hidden');
-            $(formItems[currentFormItem - 1]).removeClass('field-container--hidden');
-
-            currentFormItem = currentFormItem - 1;
-            checkFormVisibility();
-            changeStepperNumber();
-          }
-
-          function showNext() {
-            $('.form-controls__next').removeClass('form-controls--hidden');
-            $('.form-controls__prev').removeClass('form-controls--back');
-          }
-
-          $('.form-controls__next').click(function() {
-            formControlNext();
-
-            return false;
-          })
-
-          $('.form-controls__prev').click(function() {
-            formControlPrev();
-
-            return false;
-          })
-
-          // Update the number of steps and update the content to match input
-          function changeStepperNumber() {
-            if (currentFormItem === 3) {
-              $('.form-controls__steps').text('4 / 4');
-              //$('.field-message').text('Time to buy that sweet sweet bag.');
-              $('.form-controls').addClass('form-controls--end');
-            } else if (currentFormItem === 2) {
-              $('.form-controls__steps').text('3 / 4');
-              $('.field-message').text('This is on the back of your card.');
-              $('.form-controls').removeClass('form-controls--end');
-            } else if (currentFormItem === 1) {
-              $('.form-controls__steps').text('2 / 4');
-              $('.field-message').text('When will your card expire?');
-            } else {
-              $('.form-controls__steps').text('1 / 4');
-              $('.field-message').text('Let\'s add your card number.');
-            }
-          }
-
-          // Show/hide the appropriate controls
-          function checkFormVisibility() {
-            if (currentFormItem === 0) {
-              $('.form-controls__prev').addClass('form-controls--hidden');
-            } else {
-              $('.form-controls__prev').removeClass('form-controls--hidden');
-            }
-
-            if (currentFormItem === 3) {
-              $('.form-controls__next').addClass('form-controls--hidden');
-            } else {
-              $('.form-controls__next').removeClass('form-controls--hidden');
-            }
-          }
-          // Create Braintree components
-          braintree.client.create({
-            authorization: '#{client_Token}'
-          }, function(err, client) {
-            if (err) {
-              console.error(err);
-              return;
-            }
-
-            braintree.hostedFields.create({
-              client: client,
-              styles: {
-                'input': {
-                  'font-size': '2em',
-                  'font-weight': '300',
-                  'font-family': 'sans-serif',
-                  'color': '#fff'
-                },
-                ':focus': {
-                  'color': '#fff'
-                },
-                '.invalid': {
-                  'color': '#fff'
-                },
-                '@media screen and (max-width: 361px)': {
-                  'input': {
-                    'font-size': '1em'
-                  }
-                }
-              },
-              fields: {
-                number: {
-                  selector: '#card-number'
-                },
-                cvv: {
-                  selector: '#cvv'
-                },
-                expirationDate: {
-                  selector: '#expiration-date'
-                }
-              }
-            }, function(err, hostedFields) {
-              if (err) {
-                console.error(err);
-                return;
-              }
-
-              hostedFields.on('validityChange', function(event) {
-                var field = event.fields[event.emittedBy];
-
-                if (field.isValid) {
-                  // Show Next button if inputs are valid
-                  showNext();
-
-                  // Update message to reflect success
-                  $('.field-message').text('Nice! Let\'s move on…');
-                } else if (!field.isPotentiallyValid) {
-                  // Hide next button
-                  $('.form-controls__next').addClass('form-controls--hidden');
-                  // Change the top message based on the input error
-                  switch ($(field.container).attr('id')) {
-                    case 'card-number':
-                      $('.field-message').text('Please check if you typed the correct card number.');
-                      break;
-                    case 'expiration-date':
-                      $('.field-message').text('Please check your expiration date.');
-                      break;
-                    case 'cvv':
-                      $('.field-message').text('Please check your security code.');
-                      break;
-                  }
-                } else {
-                  switch ($(field.container).attr('id')) {
-                    case 'card-number':
-                      $('.field-message').text('Let\'s add your card number.');
-                      break;
-                    case 'expiration-date':
-                      $('.field-message').text('When will your card expire?');
-                      break;
-                    case 'cvv':
-                      $('.field-message').text('This is on the back of your card.');
-                      break;
-                  }
-                }
-              });
-
-              hostedFields.on('focus', function(event) {
-                var field = event.fields[event.emittedBy];
-
-                $(field.container).prev('.hosted-field--label').addClass('hosted-field--label--moved');
-                $(field.container).parent().addClass('field-container--active');
-              });
-
-              hostedFields.on('blur', function(event) {
-                var field = event.fields[event.emittedBy];
-
-                $(field.container).prev('.hosted-field--label').removeClass('hosted-field--label--moved');
-                $(field.container).parent().removeClass('field-container--active');
-              });
-
-              hostedFields.on('empty', function(event) {
-                var field = event.fields[event.emittedBy];
-
-                $(field.container).prev('.hosted-field--label').removeClass('not-empty');
-              });
-
-              hostedFields.on('notEmpty', function(event) {
-                var field = event.fields[event.emittedBy];
-
-                $(field.container).prev('.hosted-field--label').addClass('not-empty');
-              });
-
-              form.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                hostedFields.tokenize(function(err, payload) {
-                  if (err) {
-                    console.error(err);
-                    return;
-                  }
-                  var URL = 'http://localhost:6969/payment';
-                  var obj = {
-                    'paymentMethodNonce': payload.nonce
-                  }
-                  $.ajax({
-                      url: URL,
-                      type: "POST",
-                      data: JSON.stringify(obj),
-                      contentType: "application/json",
-                      success: function() {
-                        console.log("WORKS")
-                      },
-                      error: function() {
-                          console.log("NOT QUITE ;)")
-                      }
-                  });
-                });
-              });
-            });
-          });
-
-
-
-
-
-
-
-
-    .container
         != messages()
     block content
 
-
+        
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
         script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
+
