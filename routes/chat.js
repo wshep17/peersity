@@ -7,6 +7,8 @@ var userModel = require('../models/user');
 require('dotenv').config();
 var AccessToken = require('twilio').jwt.AccessToken;
 var VideoGrant = AccessToken.VideoGrant;
+const stripe = require("stripe")("sk_test_KwJjUZ4JT3rUZNH4Z3xM8BNk00JWBD1N8C")
+
 /* GET home page. */
 
 //this is the chat page that shows history of all chats
@@ -16,7 +18,17 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 });
 
 router.post('/', ensureAuthenticated, function(req, res) {
-    db.collection('DefaultUser').update({name : req.user.name}, {$set : {room: "", isRequested: false}});
+    // if (req.user.isTutor && !req.user.sentRequest) {
+    //   var amount = Math.trunc(25 * .8 * (req.body.seconds/ 60));
+    //   stripe.payouts.create({
+    //     amount: amount,
+    //     currency: "usd",
+    //     destination: req.user.accountId
+    //   }, function(err, payout) {
+    //     // asynchronously called
+    //   });
+    // }
+    db.collection('DefaultUser').update({name : req.user.name}, {$set : {room: "", isRequested: false, sentRequest: false }});
     res.redirect('../home')
 })
 
