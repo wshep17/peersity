@@ -9,7 +9,7 @@ html(lang='en')
         link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js')
 
-        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
         link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 
@@ -39,7 +39,7 @@ html(lang='en')
                         if user
                             if user.isAdmin
                                 li
-                                    a.nav-link(href='/admin',style="padding-left: 20px") Admin 
+                                    a.nav-link(href='/admin',style="padding-left: 20px") Admin
                         if !user
                             li
                                 a.nav-link(href='users/register',style="padding-left: 20px") Register
@@ -50,6 +50,8 @@ html(lang='en')
                         li
                             a.nav-link(href='users/logout',style="padding-left: 20px") Logout
 
+        button#myButton.float-left.submit-button(onclick="location.href = 'http://localhost:6969/home/test';") Home
+
         if (user.isTutor)
 
 
@@ -59,6 +61,7 @@ html(lang='en')
                 if (user.isRequested)
                     form(method='post', action='/home')
                         input.btn.btn-primary(type='submit', name='isRequested', value = 'You have been requested', id = studentRequest)
+
 
       .card.border-0.middle(style='width: 30rem;')
         div(id="header")
@@ -106,16 +109,15 @@ html(lang='en')
                 button.btn.btn-secondary(id="exit2", type='button', data-dismiss='modal') Close
 
 
-
         script(src="/socket.io/socket.io.js")
-        script. 
+        script.
             var num = 0;
             function activateNotification() {
                 document.getElementById('popup').style.display = "block";
                 document.getElementById('original_panel').style.display = "none";
                 document.getElementById('spbutton').style.display = "none";
                 document.getElementById('header').style.display = "none";
-            }       
+            }
             var toggle = document.getElementById('green');
             var URL = 'http://localhost:6969/home/available';
             toggle.addEventListener("click", function (event) {
@@ -131,8 +133,8 @@ html(lang='en')
                 };
                 event.preventDefault();
                     $.ajax({
-                        url: URL, 
-                        type: "POST", 
+                        url: URL,
+                        type: "POST",
                         data: JSON.stringify(obj),
                         contentType: "application/json",
                         success: function() {
@@ -141,13 +143,13 @@ html(lang='en')
                                 name: '#{user.name}'
                             })
 
-                        }, 
+                        },
                         error: function() {
                             console.log("CMON! nabbit, ya gotta issue with ur ajax request")
                         }
                     });
                     socket.on('notify', function(data) {
-                        //We have access to some 'data' if we need it. 
+                        //We have access to some 'data' if we need it.
                         activateNotification();
                     })
             })
@@ -159,7 +161,7 @@ html(lang='en')
             acceptBtn.addEventListener("click", function(event) {
                 socket.emit('notify', {
                     room: num,
-                    message: 'You have been requested', 
+                    message: 'You have been requested',
                 })
                 console.log('I choose to accept this request: ' + num)
             })
@@ -194,9 +196,11 @@ html(lang='en')
 
 
 
+    .container
+        != messages()
     block content
 
-        
+
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
         script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
-
+        script(src='/javascripts/homeClient.js')
