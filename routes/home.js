@@ -7,18 +7,23 @@ var cors = require('cors')
 var request = require('request');
 var header;
 
-/* GET root page for the home route. */
+/**
+TODO: Figure out how to make a post request to the url, passing in the authorization code.
+	  We should be able to obtain the account ID, but I wasn't able to retrieve it. Instead
+	  I got some long json pertaining to the post request I made, but NOT the response.
+	  Helpful Link: https://stripe.com/docs/connect/standard-accounts#token-request
+*/
 router.get('/', ensureAuthenticated, function(req, res, next) {
 	header = req.param('code');
+	//console.log(header);
 	if (header) {
 	    var data = {
 		  'client_secret': 'sk_test_Tfi92VcscIR3G8fqFWxxBsIu00Y7QAmHNW',
 		  'code': header,
 		  'grant_type': 'authorization_code'
 		}
-		request.post('https://connect.stripe.com/oauth/token', data=data, function(response) {
-			console.log(response)
-		})
+		var response = request.post('https://connect.stripe.com/oauth/token', data=data)
+		console.log(response.text())
 	}
 	
 	res.render('home', { title: 'Home' });
