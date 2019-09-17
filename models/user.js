@@ -39,7 +39,11 @@ var UserSchema = mongoose.Schema({
 		type: String
 	}, isRequested: {
 		type: Boolean
-	}, 
+	}, sentRequest: {
+		type: Boolean
+	}, accountId: {
+		type: String
+	}
 },
 {collection: 'DefaultUser'});
 
