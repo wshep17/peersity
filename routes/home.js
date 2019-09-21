@@ -4,7 +4,7 @@ var mongoUtil = require('../mongoUtil');
 var db = mongoUtil.getDb();
 var socket = require('socket.io');
 var cors = require('cors')
-var request = require('request');
+var re = require('request');
 var header;
 
 /**
@@ -15,27 +15,15 @@ TODO: Figure out how to make a post request to the url, passing in the authoriza
 */
 router.get('/', ensureAuthenticated, function(req, res, next) {
 	header = req.param('code');
-	console.log(header);
-	if (header) {
-		request.post(
-		  'https://connect.stripe.com/oauth/token', {
-		    form: {
-		      client_secret: "sk_test_4eC39HqLyjWDarjtT1zdp7dc",
-		      code: header,
-		      grant_type: "authorization_code",
-		    }
-		  },
-		  function (error, response, body) {
-		    console.log(response)
-		    if (!error && response.statusCode == 200) {
-		      console.log(response)
-		    }
-		  }
-		);
-	}
+	re.post('https://connect.stripe.com/oauth/token?client_secret=sk_test_ARy8kmpOguTofYysso7KGjqk00AwEdavtp&code=' + header + '&grant_type=authorization_code', {json: true}, function (error, response, body) {
+	    if (!error && response.statusCode == 200) {
+	      console.log(body);
+	    } else {
+	    	console.log(response.statusCode);
+	    }
+	})
 	res.render('home', { title: 'Home' });
-});
-
+})
 
 
 
