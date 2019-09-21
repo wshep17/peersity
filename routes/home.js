@@ -15,27 +15,32 @@ TODO: Figure out how to make a post request to the url, passing in the authoriza
 */
 router.get('/', ensureAuthenticated, function(req, res, next) {
 	header = req.param('code');
-	//console.log(header);
+	console.log(header);
 	if (header) {
-	    var data = {
-		  'client_secret': 'sk_test_Tfi92VcscIR3G8fqFWxxBsIu00Y7QAmHNW',
-		  'code': header,
-		  'grant_type': 'authorization_code'
-		}
-		var response = request.post('https://connect.stripe.com/oauth/token', data=data)
-		console.log(response.text())
+		request.post(
+		  'https://connect.stripe.com/oauth/token', {
+		    form: {
+		      client_secret: "sk_test_4eC39HqLyjWDarjtT1zdp7dc",
+		      code: header,
+		      grant_type: "authorization_code",
+		    }
+		  },
+		  function (error, response, body) {
+		    console.log(response)
+		    if (!error && response.statusCode == 200) {
+		      console.log(response)
+		    }
+		  }
+		);
 	}
-	
 	res.render('home', { title: 'Home' });
 });
 
-router.post('/oauthComplete', ensureAuthenticated, function (req, res, next) {
 
-	res.render('home');
-})
+
 
 router.get('/test', ensureAuthenticated, function(req, res, next) {
-	res.redirect('https://dashboard.stripe.com/express/oauth/authorize?response_type=code&client_id=ca_Fd4RNlLyzXFDVNvZSmI5cSSRyZ4LDSuN&scope=read_write&redirect_uri=http://localhost:6969/oauthComplete');
+	res.redirect('https://dashboard.stripe.com/express/oauth/authorize?response_type=code&client_id=ca_Fd4RNlLyzXFDVNvZSmI5cSSRyZ4LDSuN&scope=read_write&redirect_uri=http://localhost:6969/home');
 });
 
 router.post('/available', ensureAuthenticated, (req,res,next) => {
