@@ -39,7 +39,12 @@ var UserSchema = mongoose.Schema({
 		type: String
 	}, isRequested: {
 		type: Boolean
-	}, 
+	}, cart: {
+		type: Number
+	}, minutes: {
+		type: Number
+	}
+
 },
 {collection: 'DefaultUser'});
 
