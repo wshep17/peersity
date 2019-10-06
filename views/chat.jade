@@ -46,7 +46,7 @@ html(lang='en',  id='HTML')
                         li
                             a.nav-link(href='users/logout',style="padding-left: 20px") Logout
 
-    if (user.isRequested)        
+    if (user.isRequested)
         div(id='waiting_screen', style = "display:block;")
           .card.middleNote(style='width: 30rem; background-color: black;')
             .card.text-center
@@ -87,7 +87,7 @@ html(lang='en',  id='HTML')
               button(id='send' value='Send') Send
             #controls
 
-    else 
+    else
         div(id='chatpage', style = "display:block;")
             #top-div
               #slideout-menu
@@ -98,7 +98,7 @@ html(lang='en',  id='HTML')
                     button#button-preview Preview My Camera
                     button#stop-preview Stop Preview
                   form(method='post', action='/chat', class='')
-                    input.btn.btn-primary(id='leave', type='submit', value = 'Leave')
+                    input.btn.btn-primary(id='leave', type='submit', value = 'Leave', onclick="window.location.href = 'http://localhost:6969/home';")
                   button#button-join Join Video Call
                   button#button-leave Leave Video Call
 
@@ -118,7 +118,7 @@ html(lang='en',  id='HTML')
               input(id='handle', type='text', value = user.name, style= 'width: 0px; visibility: hidden;')
               input(id='message', type='text')
               button(id='send' value='Send') Send
-            #controls      
+            #controls
 
     script(src="/socket.io/socket.io.js")
     script.

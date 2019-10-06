@@ -12,11 +12,11 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 router.post('/', ensureAuthenticated, function(req, res, next) {
 	db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: false}});
 	var query = [
-                   { 
+                   {
                      $match: {
                           $and: [
                               {isTutoring: {$in: [req.body.coursename]}},
-                              {isTutor: true}, 
+                              {isTutor: true},
                               {isAvailable: true},
                               {isRequested: false}
                           ]
@@ -34,13 +34,16 @@ router.post('/', ensureAuthenticated, function(req, res, next) {
 			//console.log(results)
 			res.render('findatutor', {user: req.user, title: 'FindATutor'})
 		}
-	}) 
+	})
 });
 
 
 
 function ensureAuthenticated(req, res, next) {
 	if(req.isAuthenticated()){
+    if(req.user.TutorInUserState == false) {
+      res.redirect('/home')
+    }
 		return next();
 	}
 	res.redirect('/users/login');

@@ -178,7 +178,7 @@ if (app.get('env') === 'development') {
     var room;
     var name;
 
-    console.log("a user has connected");  
+    console.log("a user has connected");
     //io.removeAllListeners('connection');
 
 
