@@ -32,6 +32,16 @@ ul.success li{
 	border: orange;
 }
 
+.clickedButton {
+  background-color: yellow;
+  border: yellow;
+  color: gray;
+}
+
+.notClickButton {
+  
+}
+
 .button_attributes:hover {
   -ms-transform: scale(1.5); /* IE 9 */
   -webkit-transform: scale(1.5); /* Safari 3-8 */
