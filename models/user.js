@@ -46,13 +46,18 @@ var UserSchema = mongoose.Schema({
 	},
 	TutorInUserState: {
 		type: Boolean
-	},
+  },
 	accountId: {
 		type: String
 	},
 	sentRequest: {
 		type: Boolean
 	},
+  cart: {
+		type: Number
+	}, minutes: {
+		type: Number
+	}
 },
 {collection: 'DefaultUser'});
 

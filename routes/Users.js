@@ -74,6 +74,8 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
   var hasApplied = false;
   var room = "";
   var isRequested = false;
+  var cart = 0;
+  var minutes = 0;
 
 
   if(req.file){
@@ -112,7 +114,8 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
       hasApplied: hasApplied,
       room: room,
       isRequested: isRequested,
-      
+      cart: cart,
+      minutes: minutes
     });
 
     User.createUser(newUser, function(err, user){

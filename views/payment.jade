@@ -7,7 +7,6 @@ html(lang='en')
 
         // Bootstrap CSS
         link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js')
 
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js')
         link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
@@ -20,6 +19,13 @@ html(lang='en')
 
         //Socket Funcionality import
         script(src="/socket.io/socket.io.js")
+        script(src='https://js.stripe.com/v3/')
+        link(href='/stylesheets/payment_client.css', rel='stylesheet')
+
+        //Carousel Look
+        link(rel='stylesheet', href='https://www.w3schools.com/w3css/4/w3.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js')
 
         title Peersity
 
@@ -51,11 +57,45 @@ html(lang='en')
                         li
                             a.nav-link(href='users/logout',style="padding-left: 20px") Logout
 
+
+        button(type='submit', id='sub') Submit Card
+        #card-element
+        #card-errors(role='alert')
+
+        div.title   
+            |Minute Marketplace
+        .card.border-0.middle.shadow-lg.p-3.mb-5.rounded(style='width: 50rem;')
+            div(class="logo_padding")
+                h1(style="text-align:center; font-size: 30px; color: white; font-family: Times New Roman; font-weight: bold")
+                    |How many minutes would you like?
+            ul.list-group.list-group-flush
+                form(method='#', action='#')
+                    div(class="padding")
+                        button.btn.btn-primary.button_attributes(class="button_min", type="submit", id="ten_min", name="10", value = 'true') 10 min(s)
+                    div(class="padding")
+                        button.btn.btn-primary.button_attributes(class="button_min", type="submit", id="fifteen_min", name="15", value = 'true') 15 min(s)
+                    div(class="padding")
+                        button.btn.btn-primary.button_attributes(class="button_min", type="submit", id="twenty_min", name="20", value = 'true') 20 min(s)
+                    div(class="padding")
+                        button.btn.btn-primary.button_attributes(class="button_min", type="submit", id="thirty_min", name="30", value = 'true') 30 min(s)  
+                    div(class="padding")
+                        button.btn.btn-primary.button_attributes() Next
+
+
+
+
+
+
+
+
+
+
+
     .container
         != messages()
     block content
 
-        
+        script(src='javascripts/payment_client.js')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
         script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
 

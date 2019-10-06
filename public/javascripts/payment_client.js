@@ -1,219 +1,123 @@
-var form = document.querySelector('#cardForm');
+// Create a Stripe client.
+var stripe = Stripe('pk_test_vjw8x1OZbDALThPQv0uhBEfi00tvRCvqua');
 
-// Input switcher
-var formItems = [];
-var currentFormItem = 0;
+// Create an instance of Elements.
+var elements = stripe.elements();
 
-$('.field-container').each(function() {
-  formItems.push(this);
-})
-
-// Add the functionality for what happens when people will click on next
-function formControlNext() {
-  $(formItems[currentFormItem]).addClass('field-container--hidden');
-  $(formItems[currentFormItem + 1]).removeClass('field-container--hidden');
-
-  currentFormItem = currentFormItem + 1;
-  checkFormVisibility();
-  changeStepperNumber();
-
-  hideNext();
-
-  return false;
-}
-
-function hideNext() {
-  if (!$(formItems[currentFormItem + 1]).find('.hosted-field').hasClass('hosted-field')) {
-    $('.form-controls__next').addClass('form-controls--hidden');
-  }
-  
-  $('.form-controls__prev').addClass('form-controls--back');
-}
-
-function formControlPrev() {
-  $(formItems[currentFormItem]).addClass('field-container--hidden');
-  $(formItems[currentFormItem - 1]).removeClass('field-container--hidden');
-
-  currentFormItem = currentFormItem - 1;
-  checkFormVisibility();
-  changeStepperNumber();
-}
-
-function showNext() {
-  $('.form-controls__next').removeClass('form-controls--hidden');
-  $('.form-controls__prev').removeClass('form-controls--back');
-}
-
-$('.form-controls__next').click(function() {
-  formControlNext();
-
-  return false;
-})
-
-$('.form-controls__prev').click(function() {
-  formControlPrev();
-
-  return false;
-})
-
-// Update the number of steps and update the content to match input
-function changeStepperNumber() {
-  if (currentFormItem === 3) {
-    $('.form-controls__steps').text('4 / 4');
-    //$('.field-message').text('Time to buy that sweet sweet bag.');
-    $('.form-controls').addClass('form-controls--end');
-  } else if (currentFormItem === 2) {
-    $('.form-controls__steps').text('3 / 4');
-    $('.field-message').text('This is on the back of your card.');
-    $('.form-controls').removeClass('form-controls--end');
-  } else if (currentFormItem === 1) {
-    $('.form-controls__steps').text('2 / 4');
-    $('.field-message').text('When will your card expire?');
-  } else {
-    $('.form-controls__steps').text('1 / 4');
-    $('.field-message').text('Let\'s add your card number.');
-  }
-}
-
-// Show/hide the appropriate controls
-function checkFormVisibility() {
-  if (currentFormItem === 0) {
-    $('.form-controls__prev').addClass('form-controls--hidden');
-  } else {
-    $('.form-controls__prev').removeClass('form-controls--hidden');
-  }
-
-  if (currentFormItem === 3) {
-    $('.form-controls__next').addClass('form-controls--hidden');
-  } else {
-    $('.form-controls__next').removeClass('form-controls--hidden');
-  }
-}
-
-// Create Braintree components
-braintree.client.create({
-  authorization: 'sandbox_g42y39zw_348pk9cgf3bgyw2b'
-}, function(err, client) {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  braintree.hostedFields.create({
-    client: client,
-    styles: {
-      'input': {
-        'font-size': '2em',
-        'font-weight': '300',
-        'font-family': 'sans-serif',
-        'color': '#fff'
-      },
-      ':focus': {
-        'color': '#fff'
-      },
-      '.invalid': {
-        'color': '#fff'
-      },
-      '@media screen and (max-width: 361px)': {
-        'input': {
-          'font-size': '1em'
-        }
-      }
-    },
-    fields: {
-      number: {
-        selector: '#card-number'
-      },
-      cvv: {
-        selector: '#cvv'
-      },
-      expirationDate: {
-        selector: '#expiration-date'
-      }
+// Custom styling can be passed to options when creating an Element.
+// (Note that this demo uses a wider set of styles than the guide below.)
+var style = {
+  base: {
+    color: '#32325d',
+    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+    fontSmoothing: 'antialiased',
+    fontSize: '16px',
+    '::placeholder': {
+      color: '#aab7c4'
     }
-  }, function(err, hostedFields) {
-    if (err) {
-      console.error(err);
-      return;
-    }
+  },
+  invalid: {
+    color: '#fa755a',
+    iconColor: '#fa755a'
+  }
+};
 
-    hostedFields.on('validityChange', function(event) {
-      var field = event.fields[event.emittedBy];
+// Create an instance of the card Element.
+var card = elements.create('card', {style: style});
 
-      if (field.isValid) {
-        // Show Next button if inputs are valid
-        showNext();
+// Add an instance of the card Element into the `card-element` <div>.
+card.mount('#card-element');
 
-        // Update message to reflect success
-        $('.field-message').text('Nice! Let\'s move on…');
-      } else if (!field.isPotentiallyValid) {
-        // Hide next button
-        $('.form-controls__next').addClass('form-controls--hidden');
-        // Change the top message based on the input error
-        switch ($(field.container).attr('id')) {
-          case 'card-number':
-            $('.field-message').text('Please check if you typed the correct card number.');
-            break;
-          case 'expiration-date':
-            $('.field-message').text('Please check your expiration date.');
-            break;
-          case 'cvv':
-            $('.field-message').text('Please check your security code.');
-            break;
-        }
-      } else {
-        switch ($(field.container).attr('id')) {
-          case 'card-number':
-            $('.field-message').text('Let\'s add your card number.');
-            break;
-          case 'expiration-date':
-            $('.field-message').text('When will your card expire?');
-            break;
-          case 'cvv':
-            $('.field-message').text('This is on the back of your card.');
-            break;
-        }
+// Handle real-time validation errors from the card Element.
+card.addEventListener('change', function(event) {
+  var displayError = document.getElementById('card-errors');
+  if (event.error) {
+    displayError.textContent = event.error.message;
+  } else {
+    displayError.textContent = '';
+  }
+});
+
+// Handle form submission.
+var button = document.getElementById('sub');
+button.addEventListener('click', function(event) {
+  event.preventDefault();
+
+  stripe.createToken(card).then(function(result) {
+    if (result.error) {
+      // Inform the user if there was an error.
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = result.error.message;
+    } else {
+      // Send the token to your server.
+      console.log(JSON.stringify(result))
+      var URL = 'http://localhost:6969/payment';
+      var obj = {
+        token: result.token
       }
-    });
-
-    hostedFields.on('focus', function(event) {
-      var field = event.fields[event.emittedBy];
-
-      $(field.container).prev('.hosted-field--label').addClass('hosted-field--label--moved');
-      $(field.container).parent().addClass('field-container--active');
-    });
-
-    hostedFields.on('blur', function(event) {
-      var field = event.fields[event.emittedBy];
-
-      $(field.container).prev('.hosted-field--label').removeClass('hosted-field--label--moved');
-      $(field.container).parent().removeClass('field-container--active');
-    });
-
-    hostedFields.on('empty', function(event) {
-      var field = event.fields[event.emittedBy];
-
-      $(field.container).prev('.hosted-field--label').removeClass('not-empty');
-    });
-
-    hostedFields.on('notEmpty', function(event) {
-      var field = event.fields[event.emittedBy];
-
-      $(field.container).prev('.hosted-field--label').addClass('not-empty');
-    });
-
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      hostedFields.tokenize(function(err, payload) {
-        if (err) {
-          console.error(err);
-          return;
+      $.ajax({
+        url: URL,
+        type: "POST",
+        data: JSON.stringify(obj),
+        contentType: "application/json",
+        success: function () {
+          console.log("AJAX sent correctly")
+        },
+        error: function () {
+          console.log("AJAX sent incorrectly")
         }
-
-        // This is where you would submit payload.nonce to your server
-        alert('Submit your nonce to your server here!' + payload.nonce);
-      });
-    });
+      })
+    }
   });
 });
+
+function minutesToSeconds(minutes) {
+  var result = minutes * 60;
+  return result;
+}
+
+/**
+  This function will to turn the amount of minutes to pennies
+*/
+function minutesToPennies(minutes) {
+  var result = minutes * 25;
+  return result;
+}
+/**
+  This function will to turn the amount of pennies to dollars
+*/
+function penniesToDollars(pennies) {
+  var result = pennies/100
+  return result;
+}
+
+//When you click a button with the time, the money will be calculated and will be sent to the server side
+$(".button_min").each(function() {
+    $(this).click(function(e) {
+      // if ($(this).attr('value') == "true") {
+      //   $(this).toggleClass('clickedButton', true);
+      // }
+      e.preventDefault();
+      var time_minutes = $(this).attr('name');
+      var transaction_price = minutesToPennies(time_minutes)
+      console.log("The dollar amount is: $" + penniesToDollars(transaction_price) + " dollars")
+      var URL = 'http://localhost:6969/payment/market';
+      var obj = {
+        time: time_minutes,
+        transaction_price: transaction_price //pennies
+      }      
+      $.ajax({
+        url: URL,
+        type: "POST",
+        data: JSON.stringify(obj),
+        contentType: "application/json",
+        success: function () {
+          console.log("AJAX sent correctly from button")
+        },
+        error: function () {
+          console.log("AJAX sent incorrectly from button")
+        }
+      })
+    });
+});
+      
