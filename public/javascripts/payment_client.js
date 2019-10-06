@@ -1,5 +1,5 @@
 // Create a Stripe client.
-var stripe = Stripe('pk_test_vjw8x1OZbDALThPQv0uhBEfi00tvRCvqua');
+var stripe = Stripe('pk_test_fx9SY4mb7GwIXUbkkHqbfPcw00337G3sMt');
 
 // Create an instance of Elements.
 var elements = stripe.elements();
@@ -105,7 +105,7 @@ $(".button_min").each(function() {
       var obj = {
         time: time_minutes,
         transaction_price: transaction_price //pennies
-      }      
+      }
       $.ajax({
         url: URL,
         type: "POST",
@@ -120,4 +120,3 @@ $(".button_min").each(function() {
       })
     });
 });
-      

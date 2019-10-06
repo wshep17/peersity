@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var stripe = require('stripe')('sk_test_ARy8kmpOguTofYysso7KGjqk00AwEdavtp');
+var stripe = require('stripe')('sk_test_KwJjUZ4JT3rUZNH4Z3xM8BNk00JWBD1N8C');
 var mongoUtil = require('../mongoUtil');
 var db = mongoUtil.getDb();
 var transaction;
