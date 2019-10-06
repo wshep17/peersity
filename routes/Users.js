@@ -76,7 +76,9 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
   var isRequested = false;
   var cart = 0;
   var minutes = 0;
-
+  var tutorInUserState = false
+  var accountId = "";
+  var sentRequest = false;
 
   if(req.file){
   	console.log('Uploading File...');
@@ -115,7 +117,10 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
       room: room,
       isRequested: isRequested,
       cart: cart,
-      minutes: minutes
+      minutes: minutes,
+      tutorInUserState,
+      accountId,
+      sentRequest
     });
 
     User.createUser(newUser, function(err, user){
