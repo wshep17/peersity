@@ -18,18 +18,21 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 });
 
 router.post('/', ensureAuthenticated, function(req, res) {
-    // if (req.user.isTutor && !req.user.sentRequest) {
-    //   var amount = Math.trunc(25 * .8 * (req.body.seconds/ 60));
-    //   stripe.payouts.create({
-    //     amount: amount,
-    //     currency: "usd",
-    //     destination: req.user.accountId
-    //   }, function(err, payout) {
-    //     // asynchronously called
-    //   });
-    // }
+  console.log('Seconds?' + req.body.seconds);
+    if (req.user.isTutor == true && req.user.TutorInUserState == false) {
+
+      var amount = Math.trunc(25 * .8 * (req.body.seconds/ 60));
+      stripe.transfers.create({
+    	  amount: amount,
+    	  currency: "usd",
+    	  destination: "acct_1FKzT9IleN6qGYMM",
+    	  transfer_group: "ORDER_95"
+    	}, function(err, transfer) {
+    	  // asynchronously called
+    	});
+  }
     db.collection('DefaultUser').update({name : req.user.name}, {$set : {room: "", isRequested: false, sentRequest: false }});
-    res.redirect('../home')
+
 })
 
 router.get('/token', function(request, response) {

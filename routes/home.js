@@ -6,22 +6,15 @@ var socket = require('socket.io');
 var cors = require('cors')
 var re = require('request');
 var header;
-
+var stripe = require("stripe")("sk_test_KwJjUZ4JT3rUZNH4Z3xM8BNk00JWBD1N8C")
 /**
 TODO: Figure out how to make a post request to the url, passing in the authorization code.
 	  We should be able to obtain the account ID, but I wasn't able to retrieve it. Instead
 	  I got some long json pertaining to the post request I made, but NOT the response.
 	  Helpful Link: https://stripe.com/docs/connect/standard-accounts#token-request
 */
+
 router.get('/', ensureAuthenticated, function(req, res, next) {
-	header = req.param('code');
-	re.post('https://connect.stripe.com/oauth/token?client_secret=sk_test_ARy8kmpOguTofYysso7KGjqk00AwEdavtp&code=' + header + '&grant_type=authorization_code', {json: true}, function (error, response, body) {
-	    if (!error && response.statusCode == 200) {
-	      console.log(body);
-	    } else {
-	    	console.log(response.statusCode);
-	    }
-	})
 	res.render('home', { title: 'Home' });
 })
 
@@ -33,12 +26,26 @@ router.get('/test', ensureAuthenticated, function(req, res, next) {
 
 router.post('/available', ensureAuthenticated, (req,res,next) => {
 	//Give Tutor their own room
-	var room = parseInt(req.body.room)
-	db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: true}});
-	db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: room}});
+	if(req.user.TutorInUserState == false) {
+		var room = parseInt(req.body.room)
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: !req.user.isAvailable}});
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: room}});
+	}
+
 	res.redirect('../home');
 })
 
+router.post('/settingToUser', ensureAuthenticated, (req, res, next) => {
+	if(req.user.isAvailable == false) {
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {TutorInUserState: true}});
+	}
+})
+router.post('/settingToTutor', ensureAuthenticated, (req, res, next) => {
+	if(req.user.sentRequest == false) {
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {TutorInUserState: false}});
+	}
+
+})
 // router.post('/credentials', ensureAuthenticated, function(req, res, next) {
 
 // })

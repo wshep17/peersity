@@ -31,19 +31,28 @@ var UserSchema = mongoose.Schema({
 	},
 	isAvailable: {
 		type: Boolean
-	}, isAdmin: {
+	},
+	isAdmin: {
 		type: Boolean
-	}, hasApplied: {
+	},
+	hasApplied: {
 		type: Boolean
-	}, room: {
+	},
+	room: {
 		type: String
-	}, isRequested: {
+	},
+	isRequested: {
 		type: Boolean
-	}, sentRequest: {
+	},
+	TutorInUserState: {
 		type: Boolean
-	}, accountId: {
+	},
+	accountId: {
 		type: String
-	}
+	},
+	sentRequest: {
+		type: Boolean
+	},
 },
 {collection: 'DefaultUser'});
 

@@ -56,12 +56,11 @@ html(lang='en')
 
 
             b(style = "text-align: center;")
-
-
                 if (user.isRequested)
                     form(method='post', action='/home')
                         input.btn.btn-primary(type='submit', name='isRequested', value = 'You have been requested', id = studentRequest)
-
+            button(type=submit, id='TutorAsUser') Set Status to User
+            button(type=submit, id='TutorAsTutor') Set Status to Tutor
 
       .card.border-0.middle(style='width: 30rem;')
         div(id="header")
@@ -192,7 +191,30 @@ html(lang='en')
               }
             }
             //END-All JS code involving Popup
-
+            //start Tutor state setting here
+            var TutorAsTutor = document.getElementById("TutorAsTutor")
+            var TutorAsUser = document.getElementById("TutorAsUser")
+            TutorAsTutor.addEventListener('click', function() {
+            $.ajax({
+                url: 'http://localhost:6969/home/settingToTutor',
+                type: "POST",
+                contentType: "application/json",
+                error: function() {
+                    console.log("CMON! nabbit, ya gotta issue with ur ajax request")
+                }
+            });
+            })
+            TutorAsUser.addEventListener('click', function() {
+            $.ajax({
+                url: 'http://localhost:6969/home/settingToUser',
+                type: "POST",
+                contentType: "application/json",
+                error: function() {
+                    console.log("CMON! nabbit, ya gotta issue with ur ajax request")
+                }
+            });
+            })
+            //end tutor state setting
 
 
 
@@ -203,4 +225,3 @@ html(lang='en')
 
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
         script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
-        script(src='/javascripts/homeClient.js')

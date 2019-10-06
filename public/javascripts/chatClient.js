@@ -11,7 +11,7 @@ var leavebtn = document.getElementById('leave')
 var buttonjoin = document.getElementById('button-join')
 var buttonleave = document.getElementById('button-leave')
 var ul = document.getElementById('ulId')
-
+var seconds = 0;
 
 
 //emit events
@@ -32,6 +32,7 @@ buttonjoin.addEventListener('click', function() {
 })
 
 buttonleave.addEventListener('click', function() {
+
   socket.emit('leftCall', {
     handle: handle.value
   })
@@ -45,10 +46,41 @@ handle: handle.value
 })
 })
 
+window.onload = function time() { //replace window.onload with the confirmation button onclick event
+                 //so use <confirmationbutton>.onclick to replace window.onload
+  setInterval(function() {
+    seconds++;
+    var minutes = seconds / 60;
+    var hours = minutes / 60;
+    var displaySeconds = ((seconds % 60) < 10) ? ("0" + Math.trunc(seconds % 60)) : Math.trunc(seconds %  60);
+    var displayMinutes =((minutes % 60) < 10) ? ("0" +  Math.trunc(minutes % 60)) : Math.trunc(minutes %  60);
+    var displayHours = Math.trunc(hours);
+    document.getElementById('timer').innerHTML = '<p>' + displayHours + ':' + displayMinutes + ':' + displaySeconds + '</p>';
+  }, 1000);
+}
 
 leavebtn.addEventListener('click', function() {
+  var obj = {
+      seconds: seconds
+  };
+  var URL = 'http://localhost:6969/chat'
+  var destination = 'http://localhost:6969/home'
+  event.preventDefault();
+      $.ajax({
+          url: URL,
+          type: "POST",
+          data: JSON.stringify(obj),
+          contentType: "application/json",
+          success: function() {
+            console.log("Successful")
+          },
+          error: function() {
+              console.log("CMON! nabbit, ya gotta issue with ur ajax request")
+          }
+      });
 socket.emit('leave', {
-handle: handle.value
+handle: handle.value,
+destination: destination
 }  )
 })
 
@@ -70,6 +102,8 @@ socket.on('load', function(data) {
 })
 socket.on('leave', function(data){
   ul.innerHTML += '<p>' + data.handle + ' has left the room. </p>';
+  //route to home from here
+  window.location.href = data.destination;
 })
 socket.on('joinedCall', function(data) {
   ul.innerHTML += '<li class=\"chats\"><p>' + data.handle + ' has joined the call! </p>' +'</li>';
