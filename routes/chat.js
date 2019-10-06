@@ -19,6 +19,9 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 
 router.post('/', ensureAuthenticated, function(req, res) {
   console.log('Seconds?' + req.body.seconds);
+	if(req.user.isTutor == false || req.user.TutorInUserState == true) {
+      		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {minutes: req.user.minutes - (req.body.seconds/60)}})
+    	}
     if (req.user.isTutor == true && req.user.TutorInUserState == false) {
 
       var amount = Math.trunc(25 * .8 * (req.body.seconds/ 60));
