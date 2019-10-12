@@ -68,33 +68,42 @@ html(lang='en')
 							th(scope='col') Email
 					tbody
 						- var n = 0
+						- var x = 0
 						for item in json
-								tr
+								tr(id = 'row_#{x++}')
 									td
-										button.btn.btn-primary.request_button_attributes(class = 'sendRequest', id='#{n++}' type = 'submit', value = '#{item.room}') Send Request
+										button.btn.btn-primary.request_button_attributes(class = 'sendRequest', id='#{n++}' type = 'submit', value = '#{item.room}', name = '#{item.username}') Send Request
 									td #{item.name}
 									td #{item.email}
 
 
 	script(src="/socket.io/socket.io.js")
 	script.
-
 		function activateNotification() {
 			document.getElementById('popup').style.display = "block";
 		}
 		var socket = io.connect('http://localhost:6969');
-
+		var val;
+		socket.emit('subscribe', {
+			room: "queue_room",
+			name: '#{user.name}'
+		})
+		socket.on('dequeue', function(data) {
+			$('#row_' + data.id).hide()
+		})
 		//When you click a tutor's name, make entire page disappear-Socket connection will end if page refreshes.
 		//Also join that tutors room, so that the tutor can send you information
 		$(document).ready(function() {
 			$('.sendRequest').each(function() {
-				console.log("what is going on")
 				$(this).click(function() {
-					$(".the_results").hide();
+					//$(".the_results").hide();
 					var roomNumber = $(this).attr('value');
+					var tutorUserName = $(this).attr('name');
+					val = $(this).attr('id');
 					var URL = 'http://localhost:6969/results/';
 					var obj = {
-						room: roomNumber
+						room: roomNumber,
+						tutorUserName: tutorUserName
 					};
 					$.ajax({
 						url: URL,
@@ -111,7 +120,10 @@ html(lang='en')
 								name: '#{user.name}'
 							})
 							socket.on('notify', function(data) {
-								activateNotification()
+								//activateNotification()
+							})
+							socket.emit('dequeue', {
+								id: val
 							})
 							console.log('The AJAX is working as intended')
 						},

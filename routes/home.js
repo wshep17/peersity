@@ -28,7 +28,7 @@ router.post('/available', ensureAuthenticated, (req,res,next) => {
 	//Give Tutor their own room
 	if(req.user.tutorInUserState == false) {
 		var room = parseInt(req.body.room)
-		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable:!req.user.isAvailable}});
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: !req.user.isAvailable}});
 		db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: room}});
 	}
 

@@ -46,14 +46,14 @@ var UserSchema = mongoose.Schema({
 	},
 	tutorInUserState: {
 		type: Boolean
-  },
+	},
 	accountId: {
 		type: String
 	},
 	sentRequest: {
 		type: Boolean
 	},
-  cart: {
+	cart: {
 		type: Number
 	}, minutes: {
 		type: Number

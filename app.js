@@ -181,8 +181,6 @@ if (app.get('env') === 'development') {
     console.log("a user has connected");
     //io.removeAllListeners('connection');
 
-
-
     socket.on('subscribe', function(data) {
       room = data.room;
       name = data.name;
@@ -201,7 +199,6 @@ if (app.get('env') === 'development') {
         notification: data.message
       })
     })
-
     socket.on('enterChat', function(data) {
       console.log("We are inside the enterChat using room " + room)
       io.sockets.in(room).emit('enterChat', {
@@ -221,8 +218,14 @@ if (app.get('env') === 'development') {
       io.sockets.in(room).emit('leftCall', data);
     })
     socket.on('disconnect', function() {
-        socket.removeAllListeners('chat')
-        console.log(name + " has disconnected")
+      socket.removeAllListeners('chat')
+      console.log(name + " has disconnected")
+    })
+    socket.on('dequeue', function(data) {
+      socket.broadcast.emit('dequeue', {
+        id: data.id
+      })
+      console.log("the id is" + data.id)
     })
  });
 
