@@ -26,9 +26,9 @@ router.get('/test', ensureAuthenticated, function(req, res, next) {
 
 router.post('/available', ensureAuthenticated, (req,res,next) => {
 	//Give Tutor their own room
-	if(req.user.TutorInUserState == false) {
+	if(req.user.tutorInUserState == false) {
 		var room = parseInt(req.body.room)
-		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: !req.user.isAvailable}});
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable:!req.user.isAvailable}});
 		db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: room}});
 	}
 
@@ -37,12 +37,12 @@ router.post('/available', ensureAuthenticated, (req,res,next) => {
 
 router.post('/settingToUser', ensureAuthenticated, (req, res, next) => {
 	if(req.user.isAvailable == false) {
-		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {TutorInUserState: true}});
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {tutorInUserState: true}});
 	}
 })
 router.post('/settingToTutor', ensureAuthenticated, (req, res, next) => {
 	if(req.user.sentRequest == false) {
-		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {TutorInUserState: false}});
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {tutorInUserState: false}});
 	}
 
 })

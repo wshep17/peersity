@@ -44,7 +44,7 @@ var UserSchema = mongoose.Schema({
 	isRequested: {
 		type: Boolean
 	},
-	TutorInUserState: {
+	tutorInUserState: {
 		type: Boolean
   },
 	accountId: {
