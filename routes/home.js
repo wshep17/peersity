@@ -7,28 +7,46 @@ var cors = require('cors')
 var re = require('request');
 var header;
 var stripe = require("stripe")("sk_test_KwJjUZ4JT3rUZNH4Z3xM8BNk00JWBD1N8C")
-/**
-TODO: Figure out how to make a post request to the url, passing in the authorization code.
-	  We should be able to obtain the account ID, but I wasn't able to retrieve it. Instead
-	  I got some long json pertaining to the post request I made, but NOT the response.
-	  Helpful Link: https://stripe.com/docs/connect/standard-accounts#token-request
-*/
+
+
 
 router.get('/', ensureAuthenticated, function(req, res, next) {
+	if(req.query != null) {
+		if(req.query.code != null) {
+
+			
+			re.post({
+			  url: 'https://connect.stripe.com/oauth/token',
+			  formData: {
+
+					code: req.query.code,
+					grant_type: 'authorization_code'
+			  },
+				headers: {'Authorization': 'Bearer ' + process.env.STRIPE_API_SECRET}
+
+			}, function(err, res, body) {
+				console.log(body)
+				var json = JSON.parse(body)
+				console.log(json["stripe_user_id"])
+				db.collection('DefaultUser').update({_id: req.user._id}, {$set: {accountId: json["stripe_user_id"]}})
+			});
+
+		}
+	}
 	res.render('home', { title: 'Home' });
-})
+} )
 
 
 
 router.get('/test', ensureAuthenticated, function(req, res, next) {
-	res.redirect('https://dashboard.stripe.com/express/oauth/authorize?response_type=code&client_id=ca_Fd4RNlLyzXFDVNvZSmI5cSSRyZ4LDSuN&scope=read_write&redirect_uri=http://localhost:6969/home');
+	res.redirect('https://dashboard.stripe.com/express/oauth/authorize?response_type=code&client_id=ca_FdBNS4cY15CUcgYtW72ZJNlx011bISp5&scope=read_write&redirect_uri=http://localhost:6969/home');
 });
 
 router.post('/available', ensureAuthenticated, (req,res,next) => {
 	//Give Tutor their own room
 	if(req.user.tutorInUserState == false) {
 		var room = parseInt(req.body.room)
-		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: !req.user.isAvailable}});
+		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable:!req.user.isAvailable}});
 		db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: room}});
 	}
 
@@ -49,6 +67,22 @@ router.post('/settingToTutor', ensureAuthenticated, (req, res, next) => {
 // router.post('/credentials', ensureAuthenticated, function(req, res, next) {
 
 // })
+router.get('/getUserInfo', ensureAuthenticated, function(req, res, next) {
+	console.log('inside getUserInfo')
+	console.log(req.user);
+	stripe_api = 'client_secret=sk_test_KwJjUZ4JT3rUZNH4Z3xM8BNk00JWBD1N8C&code='
+	res.redirect('https://connect.stripe.com/oauth/token?'+ stripe_api + '' + req.query.code + '&grant_type=authorization_code')
+	// res.send(req.user) //res.send will send the response object
+	if(req.query != null) {
+		if(req.query.code != null) {
+
+
+		}
+	}
+
+});
+
+
 
 
 function ensureAuthenticated(req, res, next) {
