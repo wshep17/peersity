@@ -51,6 +51,8 @@ html(lang='en')
                             a.nav-link(href='users/logout',style="padding-left: 20px") Logout
 
         button#myButton.float-left.submit-button(onclick="location.href = 'http://localhost:6969/home/test';") Home
+        button#accountButton.float-left checking
+
 
         if (user.isTutor)
 
@@ -193,6 +195,24 @@ html(lang='en')
               }
             }
             //END-All JS code involving Popup
+
+            document.getElementById('accountButton').addEventListener('click', function() {
+            console.log('window loaded')
+            if(window.location.href.indexOf('code=') != 1) {
+            $.ajax({
+              url: 'http://localhost:6969/home/getUserInfo',
+              type: "GET",
+              contentType: 'application/json',
+              success: function(data) {
+                console.log(data)
+              },
+              timeout: 3000
+            })
+            }
+            })
+
+
+
             //start Tutor state setting here
             var TutorAsTutor = document.getElementById("TutorAsTutor")
             var TutorAsUser = document.getElementById("TutorAsUser")
@@ -217,6 +237,8 @@ html(lang='en')
             });
             })
             //end tutor state setting
+            //onload check for stripe account id
+
 
 
 
