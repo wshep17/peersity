@@ -11,19 +11,120 @@ var leavebtn = document.getElementById('leave')
 var buttonjoin = document.getElementById('button-join')
 var buttonleave = document.getElementById('button-leave')
 var ul = document.getElementById('ulId')
-var seconds = 0;
+var minutes = 3 //give the ajax request some time to set minutes
+var minRemove = 0 //minutes we will pass to remove from the user
+var tutoring = false //use the user's isTutor and tutorInUserState field to determine
+var showOnce = 0 //set for only showing notification once
+window.addEventListener('load', function() {
+  if (window.Notification && Notification.permission !== "granted") {
+    Notification.requestPermission(function (status) {
+      if (Notification.permission !== status) {
+        Notification.permission = status;
+      }
+    });
+  }
+  $.ajax({
+    url:'http://localhost:6969/chat/getUserInfo',
+    method: 'GET',
+    contentType: 'application/json',
+    success: function(data) {
+      // console.log('get request was successful')
+      // console.log(data)
+      // console.log(data.userInfo.minutes)
+      minutes = data.userInfo.minutes
+      tutoring = data.userInfo.isTutor && !data.userInfo.tutorInUserState
+      console.log('tutoring is ' + tutoring)
+    }
+  })
+})
 
+if(minutes <= 0 && !tutoring) {
+  if (window.Notification && Notification.permission === "granted" && showOnce == 0) {
+    showOnce++
+    var notification = new Notification("Minutes are up!", {body: "Your minutes have expired. You will be redirected to the home page momentarily"});
+    setTimeout(function() {notification.close()}, 5000);
+  } else if(showOnce == 0) {
+    showOnce++
+    alert("Your minutes have expired. You will be redirected to the home page momentarily.")
+  }
+  //using leave btn functionality
+  //
+  var obj = {
+      minutes: minRemove
+  };
+  var URL = 'http://localhost:6969/chat'
+  var destination = 'http://localhost:6969/home'
+
+      $.ajax({
+          url: URL,
+          type: "POST",
+          data: JSON.stringify(obj),
+          contentType: "application/json",
+          success: function() {
+            console.log("Successful")
+
+          },
+          error: function() {
+              console.log("CMON! nabbit, ya gotta issue with ur ajax request")
+          }
+      });
+      /*using setTimeout keeps the socket from executing immediately after the condition is true, because when it executes immediately
+      it messes with the ajax request */
+      setTimeout(function() {socket.emit('leave', {handle: handle.value, destination: destination})}, 5000);//
+//
+}
+
+setInterval(function() {
+  minutes--;
+  minRemove++;
+  console.log(minutes + ' left')
+  console.log(minRemove + ' to remove')
+  if(minutes <= 0 && !tutoring) {
+    if (window.Notification && Notification.permission === "granted" && showOnce == 0) {
+      showOnce++
+      var notification = new Notification("Minutes are up!", {body: "Your minutes have expired. You will be redirected to the home page momentarily."});
+      setTimeout(function() {notification.close()}, 5000);
+    } else if(showOnce == 0){
+      showOnce++
+      alert("Your minutes have expired. You will be redirected to the home page momentarily.")
+    }
+    //using leave btn functionality
+    //
+    var obj = {
+        minutes: minRemove
+    };
+    var URL = 'http://localhost:6969/chat'
+    var destination = 'http://localhost:6969/home'
+
+        $.ajax({
+            url: URL,
+            type: "POST",
+            data: JSON.stringify(obj),
+            contentType: "application/json",
+            success: function() {
+              console.log("Successful")
+              socket.emit('leave', {handle: handle.value, destination: destination})
+            },
+            error: function() {
+                console.log("CMON! nabbit, ya gotta issue with ur ajax request")
+            }
+        });
+        /*using setTimeout keeps the socket from executing immediately after the condition is true, because when it executes immediately
+        it messes with the ajax request */
+        setTimeout(function() {socket.emit('leave', {handle: handle.value, destination: destination})}, 5000);
+  //
+  }
+}, 1000)
 
 //emit events
-var count = 0;
+
 window.addEventListener('load', function() {
 
-if(count == 0) {
-count++;
-socket.emit('load', {
-handle: handle.value
-})
-}
+
+    socket.emit('load', {
+      handle: handle.value
+    })
+
 
 buttonjoin.addEventListener('click', function() {
   socket.emit('joinedCall', {
@@ -46,22 +147,11 @@ handle: handle.value
 })
 })
 
-window.onload = function time() { //replace window.onload with the confirmation button onclick event
-                 //so use <confirmationbutton>.onclick to replace window.onload
-  setInterval(function() {
-    seconds++;
-    var minutes = seconds / 60;
-    var hours = minutes / 60;
-    var displaySeconds = ((seconds % 60) < 10) ? ("0" + Math.trunc(seconds % 60)) : Math.trunc(seconds %  60);
-    var displayMinutes =((minutes % 60) < 10) ? ("0" +  Math.trunc(minutes % 60)) : Math.trunc(minutes %  60);
-    var displayHours = Math.trunc(hours);
-    document.getElementById('timer').innerHTML = '<p>' + displayHours + ':' + displayMinutes + ':' + displaySeconds + '</p>';
-  }, 1000);
-}
+
 
 leavebtn.addEventListener('click', function() {
   var obj = {
-      seconds: seconds
+      minutes: minRemove
   };
   var URL = 'http://localhost:6969/chat'
   var destination = 'http://localhost:6969/home'
@@ -73,16 +163,17 @@ leavebtn.addEventListener('click', function() {
           contentType: "application/json",
           success: function() {
             console.log("Successful")
+
           },
           error: function() {
               console.log("CMON! nabbit, ya gotta issue with ur ajax request")
           }
       });
-socket.emit('leave', {
-handle: handle.value,
-destination: destination
-}  )
+      /*using setTimeout keeps the socket from executing immediately after the condition is true, because when it executes immediately
+      it messes with the ajax request */
+      setTimeout(function() {socket.emit('leave', {handle: handle.value, destination: destination})}, 2000);
 })
+
 
 
 //listen for events
@@ -113,6 +204,7 @@ socket.on('leftCall', function(data) {
   ul.innerHTML += '<li class=\"chats\"><p>' + data.handle + ' has left the call. </p>' +'</li>';
   $("#bottom-div").animate({ scrollTop: $('#bottom-div').prop("scrollHeight")}, 500);
 })
+
 
 message.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {

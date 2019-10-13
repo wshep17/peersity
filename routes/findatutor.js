@@ -41,7 +41,7 @@ router.post('/', ensureAuthenticated, function(req, res, next) {
 
 function ensureAuthenticated(req, res, next) {
 	if(req.isAuthenticated()){
-    if(req.user.TutorInUserState == false) {
+    if(req.user.tutorInUserState == false) {
       res.redirect('/home')
     }
 		return next();

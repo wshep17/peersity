@@ -124,7 +124,7 @@ html(lang='en',  id='HTML')
     script.
         var socket = io.connect('http://localhost:6969')
         socket.emit('subscribe', {
-            room: #{user.room},
+            room: '#{user.room}',
             name: '#{user.name}'
         })
         socket.on('enterChat', function(data) {

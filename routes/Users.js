@@ -118,9 +118,9 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
       isRequested: isRequested,
       cart: cart,
       minutes: minutes,
-      tutorInUserState,
-      accountId,
-      sentRequest
+      tutorInUserState: tutorInUserState,
+      accountId: accountId,
+      sentRequest: sentRequest
     });
 
     User.createUser(newUser, function(err, user){
