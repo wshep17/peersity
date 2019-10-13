@@ -114,7 +114,7 @@ setInterval(function() {
         setTimeout(function() {socket.emit('leave', {handle: handle.value, destination: destination})}, 5000);
   //
   }
-}, 1000)
+}, 60000)
 
 //emit events
 
