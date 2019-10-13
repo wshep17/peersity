@@ -23,6 +23,7 @@ router.get('/', ensureAuthenticated, function (req, res, next) {
   //hello();
 })
 
+
   //How to create your own functions
   function hello() {
     console.log('hello')
@@ -102,9 +103,7 @@ router.post('/', ensureAuthenticated, function (req, res, next) {
 })
 
 function ensureAuthenticated(req, res, next) {
-  if (req.user.hasApplied) {
-    res.redirect('/home')
-  }
+//doing the checking on the client side works. Because everytime the page renders, it will run the ajax request and get the value
  if(req.isAuthenticated()){
   return next();
  }

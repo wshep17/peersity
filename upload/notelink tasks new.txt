@@ -1,0 +1,11 @@
+When the user clicks the request a tutor button, it works like a queue,
+in that it waits for another user to accept his request. When that user (the tutor)
+accepts his request, they will both be brought to the same chat room.
+There is a queue page where the tutor clicks a student, and when the tutor clicks the student,
+the tutor is brought to a random chat url and the student is also brought to that url
+
+Approaches:
+Approach 1:
+add fields 'isTaken' (boolean) and url for chat room 'chaturl' (string) and add those to a student profile
+tick isTaken true if student gets connected with tutor in the chat room, otherwise false
+
