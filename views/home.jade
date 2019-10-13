@@ -196,20 +196,7 @@ html(lang='en')
             }
             //END-All JS code involving Popup
 
-            document.getElementById('accountButton').addEventListener('click', function() {
-            console.log('window loaded')
-            if(window.location.href.indexOf('code=') != 1) {
-            $.ajax({
-              url: 'http://localhost:6969/home/getUserInfo',
-              type: "GET",
-              contentType: 'application/json',
-              success: function(data) {
-                console.log(data)
-              },
-              timeout: 3000
-            })
-            }
-            })
+            
 
 
 

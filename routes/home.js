@@ -14,7 +14,7 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 	if(req.query != null) {
 		if(req.query.code != null) {
 
-			
+
 			re.post({
 			  url: 'https://connect.stripe.com/oauth/token',
 			  formData: {
@@ -64,23 +64,7 @@ router.post('/settingToTutor', ensureAuthenticated, (req, res, next) => {
 	}
 
 })
-// router.post('/credentials', ensureAuthenticated, function(req, res, next) {
 
-// })
-router.get('/getUserInfo', ensureAuthenticated, function(req, res, next) {
-	console.log('inside getUserInfo')
-	console.log(req.user);
-	stripe_api = 'client_secret=sk_test_KwJjUZ4JT3rUZNH4Z3xM8BNk00JWBD1N8C&code='
-	res.redirect('https://connect.stripe.com/oauth/token?'+ stripe_api + '' + req.query.code + '&grant_type=authorization_code')
-	// res.send(req.user) //res.send will send the response object
-	if(req.query != null) {
-		if(req.query.code != null) {
-
-
-		}
-	}
-
-});
 
 
 
