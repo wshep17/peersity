@@ -127,7 +127,7 @@ html(lang='en')
                 //socket phone compatability right below
                 //var socket = io.connect('http://192.168.43.117:6969');
                 var socket = io.connect('http://localhost:6969');
-                var roomNumber = Math.floor((Math.random() * 1000000) + 1);
+                var roomNumber = roomGenerator()
                 num = roomNumber;
                 console.log('The tutor is joining room ' + roomNumber)
                 //use a random # generator
@@ -196,7 +196,14 @@ html(lang='en')
             }
             //END-All JS code involving Popup
 
-            
+            function roomGenerator() {
+              var asciiString = "abcdefghijklmnopqrstuvwxyz0123456789_!#@*-"
+              var room = ""
+              for (var i = 0; i < 45; i++) {
+                  room += asciiString.charAt( (Math.random() * asciiString.length) |0)
+              }
+              return room
+            }
 
 
 
