@@ -24,6 +24,7 @@ var braintree = require('braintree');
 
 //MongoDB session store
 var app = express();
+
 var store = new MongoDBStore ({
   uri: 'mongodb://localhost/NoteLink',
   collection: 'session'
@@ -40,6 +41,7 @@ app.io = io; //Ask Andre what this assignment means?
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
 
 
 // uncomment after placing your favicon in /public
