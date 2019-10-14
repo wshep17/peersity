@@ -18,20 +18,24 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 });
 
 router.post('/', ensureAuthenticated, function(req, res) {
-  console.log('Seconds?' + req.body.seconds);
-    if (req.user.isTutor == true && req.user.TutorInUserState == false) {
+  console.log(req.body.minutes);
+    if (req.user.isTutor == true && req.user.tutorInUserState == false) {
 
-      var amount = Math.trunc(25 * .8 * (req.body.seconds/ 60));
+      var amount = Math.trunc(25 * .8 * (req.body.minutes));
       stripe.transfers.create({
     	  amount: amount,
     	  currency: "usd",
-    	  destination: "acct_1FKzT9IleN6qGYMM",
-    	  transfer_group: "ORDER_95"
+    	  destination: req.user.accountId,
+    	  transfer_group: "tutor"
     	}, function(err, transfer) {
     	  // asynchronously called
     	});
   }
-    db.collection('DefaultUser').update({name : req.user.name}, {$set : {room: "", isRequested: false, sentRequest: false }});
+    if(req.user.isTutor == false || req.user.tutorInUserState == true) {
+      db.collection('DefaultUser').update({_id: req.user._id}, {$set: {minutes: 0}})
+      console.log(req.user.minutes)
+    }
+    db.collection('DefaultUser').update({_id : req.user._id}, {$set : {room: "", isRequested: false, sentRequest: false }});
 
 })
 
@@ -57,6 +61,9 @@ router.get('/token', function(request, response) {
   });
 });
 
+router.get('/getUserInfo', function(req, res, next) {
+  res.send({userInfo: req.user})
+})
 
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){

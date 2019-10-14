@@ -6,9 +6,9 @@ html(lang='en')
         meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
         // Bootstrap CSS
         link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js')
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
-        script(src='javascripts/applyClient.js')
+
         link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
         script (src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js")
@@ -46,12 +46,13 @@ html(lang='en')
     .card.border-0.middle.shadow-lg.p-3.mb-5.rounded.under-nav(style='width: 25rem; height: 85%; text-align:center;')
       div.logo_padding.bringDown
        h2.page-header.h2Text Tutor Application
-       p(style='font-size: 14px;') Note: You can only submit one application per semester
-
+       p#otherk(style='font-size: 14px;') Note: You can only submit one application per semester
+       p#fileState #{message}
+       //outputting the message from server side about file
        form(method='post', action='/apply' style='text-align: center;' enctype='multipart/form-data')
         .form-group
         input(name='transcript', type='file', id='file')
-        label(for='file') Upload Transcript
+        label(id='labelToo' for='file') Upload Transcript
 
         .form-group
         label.form-name Email
@@ -66,4 +67,5 @@ html(lang='en')
         input.form-control.applyfields(name='Question', type='text')
         .form-group
         div.center
-          input.btn.btn-primary.buttons(type='submit', name='submit', value='Submit')
+          input.btn.btn-primary.buttons(type='submit', name='submit', value='Submit', id='pleaseSubmit')
+    script(src='javascripts/applyClient.js')

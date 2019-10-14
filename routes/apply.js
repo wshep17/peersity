@@ -23,6 +23,7 @@ router.get('/', ensureAuthenticated, function (req, res, next) {
   //hello();
 })
 
+
   //How to create your own functions
   function hello() {
     console.log('hello')
@@ -32,8 +33,16 @@ router.get('/', ensureAuthenticated, function (req, res, next) {
 router.post('/', ensureAuthenticated, function (req, res, next) {
   var file, filename;
   if (req.files) {
+
     file = req.files.transcript;
     filename = file.name;
+    var ext = filename.substring(filename.length - 3, filename.length)
+    var ext4 = filename.substring(filename.length - 4, filename.length)
+    console.log(ext + " " + ext4)
+    //file types we approved of..
+    if( ext == "pdf" || ext == "doc" || ext4 == "docx") {
+
+
     var myPath = path.join(__dirname, '../upload/' + filename);
     file.mv(myPath, function(err) {
       if (err) {
@@ -90,9 +99,11 @@ router.post('/', ensureAuthenticated, function (req, res, next) {
       })
         // db.collection('DefaultUser').update({_id: req.user._id}, {$set: {hasApplied: true}});
     //END of nodemailer
+    } else {
+      res.render('apply', {message: "Incorrect File Type. Only submit pdf, doc, or docx."})
+    }
   } else {
-    console.log("No file submitted")
-    res.redirect('/apply');
+    res.render('apply', {message: "No file submitted. Please submit a pdf, doc, or docx file." })
   }
 
 
@@ -102,9 +113,7 @@ router.post('/', ensureAuthenticated, function (req, res, next) {
 })
 
 function ensureAuthenticated(req, res, next) {
-  if (req.user.hasApplied) {
-    res.redirect('/home')
-  }
+//doing the checking on the client side works. Because everytime the page renders, it will run the ajax request and get the value
  if(req.isAuthenticated()){
   return next();
  }

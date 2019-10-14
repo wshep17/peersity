@@ -52,6 +52,8 @@ html(lang='en')
 
         button#myButton.float-left.submit-button(onclick="location.href = 'http://localhost:6969/home/test';") Home
 
+
+
         if (user.isTutor)
 
 
@@ -90,7 +92,7 @@ html(lang='en')
                   div(class="padding",style="padding-top: 50px;")
                       button.btn.btn-primary.button_attributes(type = 'submit', onclick = "javascript: form.action = '/findatutor';" name='find',  id = 'button1') Find a Tutor
                   div(class = "padding")
-                      button.btn.btn-primary.button_attributes(type = 'submit', onclick = "javascript: form.action = '/apply';"  name='become', value = 'Become a Tutor', id = 'button2') Become a Tutor
+                      button.btn.btn-primary.button_attributes(type = 'submit', onclick = "javascript: form.action = '/apply';"  id = 'button2') Become a Tutor
                 div(class = "padding")
                     button.btn.btn-primary.button_attributes(type = 'submit', onclick = "javascript: form.action = '/payment';"  name='pay', value = 'Buy Minutes!') Buy Minutes!
 
@@ -125,7 +127,7 @@ html(lang='en')
                 //socket phone compatability right below
                 //var socket = io.connect('http://192.168.43.117:6969');
                 var socket = io.connect('http://localhost:6969');
-                var roomNumber = Math.floor((Math.random() * 1000000) + 1);
+                var roomNumber = roomGenerator()
                 num = roomNumber;
                 console.log('The tutor is joining room ' + roomNumber)
                 //use a random # generator
@@ -193,6 +195,18 @@ html(lang='en')
               }
             }
             //END-All JS code involving Popup
+
+            function roomGenerator() {
+              var asciiString = "abcdefghijklmnopqrstuvwxyz0123456789_!#@*-"
+              var room = ""
+              for (var i = 0; i < 45; i++) {
+                  room += asciiString.charAt( (Math.random() * asciiString.length) |0)
+              }
+              return room
+            }
+
+
+
             //start Tutor state setting here
             var TutorAsTutor = document.getElementById("TutorAsTutor")
             var TutorAsUser = document.getElementById("TutorAsUser")
@@ -217,6 +231,8 @@ html(lang='en')
             });
             })
             //end tutor state setting
+            //onload check for stripe account id
+
 
 
 
