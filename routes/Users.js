@@ -7,6 +7,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoUtil = require('../mongoUtil');
 var db = mongoUtil.getDb();
 var userModel = require('../models/user');
+var refresh
 
 
 var User = require('../models/user');
@@ -15,9 +16,8 @@ var User = require('../models/user');
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
-
 router.get('/register', function(req, res, next) {
-  res.render('register',{title:'Register'});
+  res.render('register', {title: 'Register', refresh: true});
 });
 
 router.get('/login', function(req, res, next) {
@@ -61,8 +61,17 @@ passport.use(new LocalStrategy(function(username, password, done){
   });
 }));
 
-router.post('/register', upload.single('profileimage'), function(req, res, next) {
-  var sample1 = ""
+const duplicateUser = function(query_username) {
+	db.collection('DefaultUser').findOne({username: query_username}, function(err, document) {
+		if (document) {
+			console.log("duplicate user found")
+			return true;
+		} else {
+			return false;
+		}
+	});
+}
+router.post('/register', upload.single('profileimage'), async function(req, res, next) {
   var name = req.body.name;
   var email = req.body.email;
   var username = req.body.username;
@@ -89,20 +98,35 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
   }
 
   // Form Validator
-  req.checkBody('name','Name field is required').notEmpty();
-  req.checkBody('email','Email field is required').notEmpty();
-  req.checkBody('email','Email is not valid').isEmail();
-  req.checkBody('username','Username field is required').notEmpty();
-  req.checkBody('password','Password field is required').notEmpty();
+  req.checkBody('name').notEmpty();
+
+  //Email Validation Checks
+  req.checkBody('email').notEmpty();
+  req.checkBody('email').isEmail().custom(async function(value) {
+  	let emailCheck = await db.collection('DefaultUser').findOne({email: value});
+  	if (emailCheck != null) {
+  		return Promise.reject();
+  	}
+  });
+
+  //Username Validation Checks
+  req.checkBody('username').notEmpty();
+  req.checkBody('username').custom(async function(value) {
+  	let usernameCheck = await db.collection('DefaultUser').findOne({username: value});
+  	if (usernameCheck != null) {
+		return Promise.reject()
+	}
+  })
+
+  //Password Validation Checks
+  req.checkBody('password').notEmpty();
   req.checkBody('password2','Passwords do not match').equals(req.body.password);
 
   // Check Errors
-  var errors = req.validationErrors();
-
-  if(errors) {
-  	res.render('register', {
-  		errors: errors
-  	});
+  var errors = await req.getValidationResult();
+  if (!errors.isEmpty()) {
+  	//console.log(errors.mapped())
+  	res.render('register', {errors: errors.mapped(), refresh: false});
   } else {
   	var newUser = new User({
       name: name,
@@ -124,8 +148,12 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
     });
 
     User.createUser(newUser, function(err, user){
-      if(err) throw err;
-      console.log(user);
+      if(err) {
+      	throw err;
+      } else {
+  		console.log("User Successfully Created")
+      	console.log(user);
+      }
     });
 
     req.flash('success', 'You are now registered and can login');

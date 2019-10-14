@@ -54,24 +54,21 @@ html(lang='en')
 
           div(class="padding")
             .form-group
-              input.form-control(name='name', type='text', placeholder='Name', style="border-radius: 25px;")
-
+              input.form-control(name='name', required='required', type='text', placeholder='Name', style="border-radius: 25px;")
           div(class="padding")
             .form-group
-              input.form-control(name='email', type='email', placeholder='Email', style="border-radius: 25px;")
-
+              input.form-control(name='email', required='required', type='email', placeholder='ex: buzz9@gatech.edu', pattern= '^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(gatech)\.edu$', title='Your Georgia Tech email', style="border-radius: 25px;")
           div(class="padding")
             .form-group
-              input.form-control(name='username', type='text', placeholder='Username', style="border-radius: 25px;")
-
+              input.form-control(name='username', pattern="^[A-Za-z_]\\w{3,15}$", title="Your Georgia Tech student id", required='required', type='text', placeholder='ex: buzz9', style="border-radius: 25px;")
           div(class="padding")
             .form-group
-              input.form-control(name='password', type='password', placeholder='Password', style="border-radius: 25px;")
+              input.form-control(name='password', required='required', type='password', placeholder='Password', style="border-radius: 25px;", pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", title="Your password must contain: Minimum 8 characters, At least one upper case, At least one upper character, At least one digit, At least one special character")
           div(class="padding")
             .form-group
-              input.form-control(name='password2', type='password', placeholder='Confirm Password', style="border-radius: 25px;")
+              input.form-control(name='password2', type='password', placeholder='Confirm Password', style="border-radius: 25px;", pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", title="Ensure your passwords match")
             input.btn.btn-primary.loginbutton_attributes(type='submit', name='submit',value='Submit', style="width: 200px")
 
-      .container
-      != messages()
-      block content
+    if ((errors) && (refresh == false))
+        for each in errors
+            div.alert.alert-danger #{each.msg}
