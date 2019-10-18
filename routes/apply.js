@@ -16,9 +16,10 @@ router.use(upload())
 var path = require('path');
 var whichRoute;
 /* GET home page. */
-router.get('/', ensureAuthenticated, function (req, res, next) {
+router.get('/', ensureAuthenticated, hasApplied, function (req, res, next) {
   //Andre, these commands might be of use, with the file path issue w/nodemailer
   //console.log(process.pwd()); //returns the directory that Node is executed from a
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   res.render('apply')
   //hello();
 })
@@ -117,7 +118,16 @@ function ensureAuthenticated(req, res, next) {
  if(req.isAuthenticated()){
   return next();
  }
-
  res.redirect('/users/login');
 }
+
+function hasApplied(req, res, next) {
+//doing the checking on the client side works. Because everytime the page renders, it will run the ajax request and get the value
+ if(req.user.hasApplied == false){
+  return next();
+ }
+ res.redirect('/home');
+}
+
+
 module.exports = router;

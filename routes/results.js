@@ -18,7 +18,7 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 });
 
 router.post('/', ensureAuthenticated, (req,res,next) => {
-	var room = parseInt(req.body.room)
+	var room = req.body.room
 	//console.log("inside the serverside of ajax")
 	console.log("Tutor Username is " + req.body.tutorUserName)
 	db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: room}});

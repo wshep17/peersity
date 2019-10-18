@@ -32,7 +32,7 @@ router.post('/', ensureAuthenticated, function(req, res) {
     	});
   }
     if(req.user.isTutor == false || req.user.tutorInUserState == true) {
-      db.collection('DefaultUser').update({_id: req.user._id}, {$set: {minutes: 0}})
+      db.collection('DefaultUser').update({_id: req.user._id}, {$set: {minutes: req.user.minutes-req.body.minutes}})
       console.log(req.user.minutes)
     }
     db.collection('DefaultUser').update({_id : req.user._id}, {$set : {room: "", isRequested: false, sentRequest: false }});

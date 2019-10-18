@@ -85,9 +85,10 @@ router.post('/register', upload.single('profileimage'), async function(req, res,
   var isRequested = false;
   var cart = 0;
   var minutes = 0;
-  var tutorInUserState = false
+  var tutorInUserState = true;
   var accountId = "";
   var sentRequest = false;
+  var pseudoAvailable = true;
 
   if(req.file){
   	console.log('Uploading File...');
@@ -144,10 +145,11 @@ router.post('/register', upload.single('profileimage'), async function(req, res,
       minutes: minutes,
       tutorInUserState: tutorInUserState,
       accountId: accountId,
-      sentRequest: sentRequest
+      sentRequest: sentRequest,
+      pseudoAvailable: pseudoAvailable
     });
 
-    User.createUser(newUser, function(err, user){
+    User.createUser(newUser, function(err, user) {
       if(err) {
       	throw err;
       } else {
