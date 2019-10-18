@@ -95,7 +95,7 @@ router.post('/', ensureAuthenticated, function(req,res,next) {
 	Course.find(query).toArray(function(err, course) {
 })};*/
 
-function ensureAuthenticated(req, res, next){
+function ensureAuthenticated(req, res, next) {
 	if(req.isAuthenticated()){
 		return next();
 	}

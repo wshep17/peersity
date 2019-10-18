@@ -57,6 +57,9 @@ var UserSchema = mongoose.Schema({
 		type: Number
 	}, minutes: {
 		type: Number
+	},
+	pseudoAvailable: {
+		type: Boolean
 	}
 },
 {collection: 'DefaultUser'});

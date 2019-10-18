@@ -13,12 +13,9 @@ var stripe = require("stripe")("sk_test_KwJjUZ4JT3rUZNH4Z3xM8BNk00JWBD1N8C")
 router.get('/', ensureAuthenticated, function(req, res, next) {
 	if(req.query != null) {
 		if(req.query.code != null) {
-
-
 			re.post({
 			  url: 'https://connect.stripe.com/oauth/token',
 			  formData: {
-
 					code: req.query.code,
 					grant_type: 'authorization_code'
 			  },
@@ -45,11 +42,10 @@ router.get('/test', ensureAuthenticated, function(req, res, next) {
 router.post('/available', ensureAuthenticated, (req,res,next) => {
 	//Give Tutor their own room
 	if(req.user.tutorInUserState == false) {
-		var room = parseInt(req.body.room)
+		var room = req.body.room
 		db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable:!req.user.isAvailable}});
 		db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: room}});
 	}
-
 	res.redirect('../home');
 })
 

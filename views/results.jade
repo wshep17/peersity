@@ -120,7 +120,7 @@ html(lang='en')
 								name: '#{user.name}'
 							})
 							socket.on('notify', function(data) {
-								//activateNotification()
+								activateNotification()
 							})
 							socket.emit('dequeue', {
 								id: val
