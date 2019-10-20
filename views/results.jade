@@ -16,7 +16,6 @@ html(lang='en')
 		//Background Look
 		link(href='/stylesheets/background.css', rel='stylesheet')
 		link(href='/stylesheets/slider.css', rel='stylesheet')
-		link(href='/stylesheets/home.css', rel='stylesheet')
 		link(href='/stylesheets/results_background.css', rel='stylesheet')
 
 		title Peersity
@@ -72,18 +71,43 @@ html(lang='en')
 						for item in json
 								tr(id = 'row_#{x++}')
 									td
-										button.btn.btn-primary.request_button_attributes(class = 'sendRequest', id='#{n++}' type = 'submit', value = '#{item.room}', name = '#{item.username}') Send Request
+										button.btn.btn-primary.request_button_attributes(class = 'sendRequest', id='#{n++}' type = 'submit', value = '#{item.room}', name = '#{item.username}', data-toggle='modal', data-target='#exampleModal') Request
 									td #{item.name}
 									td #{item.email}
+	//Tutor Message Request Popup
+	#exampleModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+		.modal-dialog(role='document')
+			.modal-content
+				.modal-header
+					h5
+						#exampleModalLabel.modal-title You have temporarily reserved this tutor. Please describe what you need help with:
+					button.close(type='button', data-dismiss='modal', aria-label='Close')
+						span(aria-hidden='true') ×
+				.modal-body
+					form
+						.form-group
+							label.col-form-label(for='message-text') Message:
+							textarea(id='description' class='form-control')
+				.modal-footer
+					button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+					button.btn.btn-primary(onclick="location.href = 'http://localhost:6969/home';", id='confirm', type='submit') Confirm Request
+
+
 
 
 	script(src="/socket.io/socket.io.js")
 	script.
+		var socket = io.connect('http://localhost:6969');
+		console.log("The user course is" + '#{user.courseHelpReqst}')
 		function activateNotification() {
 			document.getElementById('popup').style.display = "block";
 		}
-		var socket = io.connect('http://localhost:6969');
+		var roomNumber;
+		var tutorUserName;
 		var val;
+		var tutorObj;
+		var description;
+		var courseHelpReqst = '#{user.courseHelpReqst}';
 		socket.emit('subscribe', {
 			room: "queue_room",
 			name: '#{user.name}'
@@ -91,41 +115,27 @@ html(lang='en')
 		socket.on('dequeue', function(data) {
 			$('#row_' + data.id).hide()
 		})
-		//When you click a tutor's name, make entire page disappear-Socket connection will end if page refreshes.
-		//Also join that tutors room, so that the tutor can send you information
+		//Select tutor and send them a message
 		$(document).ready(function() {
 			$('.sendRequest').each(function() {
 				$(this).click(function() {
-					//$(".the_results").hide();
-					var roomNumber = $(this).attr('value');
-					var tutorUserName = $(this).attr('name');
+					roomNumber = $(this).attr('value');
+					tutorUserName = $(this).attr('name');
 					val = $(this).attr('id');
-					var URL = 'http://localhost:6969/results/';
-					var obj = {
-						room: roomNumber,
+					socket.emit('dequeue', {
+						id: val
+					})
+					tutorObj = {
 						tutorUserName: tutorUserName
-					};
+					}
 					$.ajax({
-						url: URL,
+						url: "http://localhost:6969/results/reserve",
 						type: "POST",
-						data: JSON.stringify(obj),
+						data: JSON.stringify(tutorObj),
 						contentType: "application/json",
 						success: function() {
-							socket.emit('notify', {
-								room: roomNumber,
-								message: 'You have been requested',
-							})
-							socket.emit('subscribe', {
-								room: roomNumber,
-								name: '#{user.name}'
-							})
-							socket.on('notify', function(data) {
-								activateNotification()
-							})
-							socket.emit('dequeue', {
-								id: val
-							})
 							console.log('The AJAX is working as intended')
+							console.log("The description is " + description)
 						},
 						error: function() {
 							console.log("CMON! nabbit, ya gotta issue with ur ajax request")
@@ -133,8 +143,42 @@ html(lang='en')
 					});
 				});
 			});
-		});
+			$("#confirm").click(function() {
+				description = $("#description").val()
+				courseHelpReqst = '#{user.courseHelpReqst}'
+				tutorObj = {
+					room: roomNumber,
+					tutorUserName: tutorUserName,
+					description: description,
+					courseHelpReqst: courseHelpReqst
+				}
 
+				socket.emit('subscribe', {
+					room: roomNumber,
+					name: '#{user.name}' + 'TARGET'
+				})
+				socket.emit('notify', {
+					room: roomNumber,
+					message: 'You are requesting a tutor'
+				})
+				$.ajax({
+					url: "http://localhost:6969/results/",
+					type: "POST",
+					data: JSON.stringify(tutorObj),
+					contentType: "application/json",
+					success: function() {
+						socket.on('notify', function(data) {
+							//activateNotification()
+						})
+						console.log('The AJAX is working as intended')
+						console.log("The description is " + description)
+					},
+					error: function() {
+						console.log("CMON! nabbit, ya gotta issue with ur ajax request")
+					}
+				});
+			})
+		})
 		//When tutoree clicks "enter" they will go to the chat page(logic @button creation) and then he/she will
 		//remove that 'waiting_screen' for the tutor so that both users can chat.
 

@@ -23,7 +23,7 @@ html(lang='en')
 
 	body
 		nav.navbar.sticky-top.navbar-expand-md.bg-dark.navbar-dark
-			a.navbar-brand(href='/', class="w3-lobster") Peersity
+			a.navbar-brand(href='/home', class="w3-lobster") Peersity
 			button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNavDropdown', aria-controls='navbarNavDropdown', aria-expanded='false', aria-label='Toggle navigation')
 				span.navbar-toggler-icon
 			#navbarNavDropdown.navbar-collapse.collapse
@@ -42,18 +42,24 @@ html(lang='en')
 							li
 								a.nav-link(href='/users/register',style="padding-left: 20px") Register
 				ul.navbar-nav
-					li
+					if user
 						a.fa.fa-instagram(href='https://www.instagram.com/peersity_/')
-					li
 						a.fa.fa-twitter(href='https://twitter.com/peersity')
-
+						.btn-group
+							a.btn.btn-success(href='#', style="margin-right: 20px;")
+								| New Notification &#10071
+						.btn-group
+							a.btn.btn-danger(href='users/logout')
+								| Logout
+						
+						
 
 
 		#myDIV
-			a.btn.active(href='#slide-1')
-			a.btn(href='#slide-2')
-			a.btn(href='#slide-3')
-			a.btn(href='#slide-4')
+			a.btn.active.selections(href='#slide-1')
+			a.btn.selections(href='#slide-2')
+			a.btn.selections(href='#slide-3')
+			a.btn.selections(href='#slide-4')
 			.slides
 				#slide-1
 					div(style='height:0px;background-color:#4ec2ed;font-size:36px; color: white; text-align:center;')

@@ -41,8 +41,13 @@ html(lang='en')
                                 a.nav-link(href='users/login',style="padding-left: 20px") Login
                 ul.navbar-nav
                     if user
-                        li
-                            a.nav-link(href='users/logout',style="padding-left: 20px") Logout
+                        if (user.isRequested)
+                            .btn-group
+                                a.btn.btn-success(href='#', style="margin-right: 20px;")
+                                    | New Notification &#10071
+                        .btn-group
+                            a.btn.btn-danger(href='users/logout')
+                                | Logout
 
         a(href='/home')
           button.btn.btn-primary.done(type='button') Done

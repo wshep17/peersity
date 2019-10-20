@@ -6,10 +6,11 @@ var userModel = require('../models/user');
 
 /* GET home page. */
 router.get('/', ensureAuthenticated, function(req, res, next) {
-  res.render('findatutor', { title: 'FindATutor' });
+	res.render('findatutor', { title: 'FindATutor' });
 });
 
 router.post('/', ensureAuthenticated, function(req, res, next) {
+	db.collection('DefaultUser').update({_id: req.user._id}, {$set: {courseHelpReqst: req.body.coursename}});
 	db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: false}});
 	var query = [
                    {
@@ -18,7 +19,8 @@ router.post('/', ensureAuthenticated, function(req, res, next) {
                               {isTutoring: {$in: [req.body.coursename]}},
                               {isTutor: true},
                               {isAvailable: true},
-                              {isRequested: false}
+                              {isRequested: false},
+                              {pseudoAvailable: true}
                           ]
                      }
                    },
@@ -41,12 +43,10 @@ router.post('/', ensureAuthenticated, function(req, res, next) {
 
 function ensureAuthenticated(req, res, next) {
 	if(req.isAuthenticated()){
-    if(req.user.tutorInUserState == false) {
-      res.redirect('/home')
-    }
 		return next();
 	}
 	res.redirect('/users/login');
 }
+
 
 module.exports = router;

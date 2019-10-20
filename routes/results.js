@@ -13,23 +13,30 @@ router.io = io; //Ask Andre what this assignment means?
 
 /* GET root page for tutor results page */
 router.get('/', ensureAuthenticated, function(req, res, next) {
-	  var io = res.locals['socketio']
 	res.render('results')
 });
 
 router.post('/', ensureAuthenticated, (req,res,next) => {
-	var room = req.body.room
-	//console.log("inside the serverside of ajax")
-	console.log("Tutor Username is " + req.body.tutorUserName)
-	db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: room}});
+	//After Sending request assign tutoree to tutor's room in database
+	db.collection('DefaultUser').update({_id: req.user._id}, {$set : {room: req.body.room}});
+	db.collection('DefaultUser').update({_id: req.user._id}, {$set : {sentRequest: true}});
+
+	//Tutor request updated in datase
 	db.collection('DefaultUser').update({username: req.body.tutorUserName}, {$set : {isRequested: true}});
-	res.redirect('../chat')
+	db.collection('DefaultUser').update({username: req.body.tutorUserName}, {$set : {pseudoAvailable: true}});
+	
+	//Used to Craft the Notification
+	db.collection('DefaultUser').update({username: req.body.tutorUserName}, {$set : {mailFrom: req.user.name}});
+	db.collection('DefaultUser').update({username: req.body.tutorUserName}, {$set : {description: req.body.description}});
+	db.collection('DefaultUser').update({username: req.body.tutorUserName}, {$set : {courseHelpReqst: req.body.courseHelpReqst}});
 })
 
-
+router.post('/reserve', ensureAuthenticated, (req,res,next) => {
+	db.collection('DefaultUser').update({username: req.body.tutorUserName}, {$set : {pseudoAvailable: false}});
+})
 
 function ensureAuthenticated(req, res, next) {
-	if(req.isAuthenticated()){
+	if(req.isAuthenticated()) {
 		return next();
 	}
 	res.redirect('/users/login');

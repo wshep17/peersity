@@ -41,8 +41,9 @@ html(lang='en')
                                 a.nav-link(href='users/login',style="padding-left: 20px") Login
                 ul.navbar-nav
                     if user
-                        li
-                            a.nav-link(href='users/logout',style="padding-left: 20px") Logout
+                        .btn-group
+                            a.btn.btn-danger(href='users/logout')
+                                | Logout
     .card.border-0.middle.shadow-lg.p-3.mb-5.rounded.under-nav(style='width: 25rem; height: 85%; text-align:center;')
       div.logo_padding.bringDown
        h2.page-header.h2Text Tutor Application

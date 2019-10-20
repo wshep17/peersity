@@ -19,8 +19,7 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 
 router.post('/', ensureAuthenticated, function(req, res) {
   console.log(req.body.minutes);
-    if (req.user.isTutor == true && req.user.tutorInUserState == false) {
-
+    if (!req.user.tutorInUserState) {
       var amount = Math.trunc(25 * .8 * (req.body.minutes));
       stripe.transfers.create({
     	  amount: amount,
@@ -30,13 +29,13 @@ router.post('/', ensureAuthenticated, function(req, res) {
     	}, function(err, transfer) {
     	  // asynchronously called
     	});
-  }
-    if(req.user.isTutor == false || req.user.tutorInUserState == true) {
-      db.collection('DefaultUser').update({_id: req.user._id}, {$set: {minutes: req.user.minutes-req.body.minutes}})
-      console.log(req.user.minutes)
     }
-    db.collection('DefaultUser').update({_id : req.user._id}, {$set : {room: "", isRequested: false, sentRequest: false }});
-
+    if (!req.user.tutorInUserState) {
+      db.collection('DefaultUser').update({_id : req.user._id}, {$set : {room: "", isRequested: false, isAvailable: false, pseudoAvailable: true}});
+    } else {
+      db.collection('DefaultUser').update({_id: req.user._id}, {$set: {minutes: req.user.minutes - req.body.minutes}})
+      db.collection('DefaultUser').update({_id : req.user._id}, {$set : {room: "", sentRequest: false}});
+    }
 })
 
 router.get('/token', function(request, response) {

@@ -60,6 +60,15 @@ var UserSchema = mongoose.Schema({
 	},
 	pseudoAvailable: {
 		type: Boolean
+	},
+	description: {
+		type: String
+	},
+	mailFrom: {
+		type: String
+	},
+	courseHelpReqst: {
+		type: String
 	}
 },
 {collection: 'DefaultUser'});

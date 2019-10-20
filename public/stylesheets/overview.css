@@ -199,7 +199,7 @@ background-image: url('https://images.unsplash.com/photo-1500058504985-a3bbdb0a7
   position: relative;
 }
 
-.btn {
+.selections {
   border-radius: 10%;
   background-color: #f1f1f1;
   margin: 8px;
@@ -226,7 +226,7 @@ background-image: url('https://images.unsplash.com/photo-1500058504985-a3bbdb0a7
   background-color: #000;
 }
 
-.btn:hover {
+.selections:hover {
   background-color: lightgray;
 }
 
@@ -261,12 +261,10 @@ background-image: url('https://images.unsplash.com/photo-1500058504985-a3bbdb0a7
 }
 
 .fa {
-  padding: 20px;
-  font-size: 30px;
-  width: 50px;
+  margin-right: 20px;
+  padding-top: 8px;
   text-align: center;
   text-decoration: none;
-  margin: 5px 2px;
 }
 
 .fa-facebook {
