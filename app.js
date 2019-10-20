@@ -224,12 +224,11 @@ if (app.get('env') === 'development') {
       console.log(name + " has disconnected")
     })
     socket.on('dequeue', function(data) {
+      console.log("registering a dequeue")
       socket.broadcast.emit('dequeue', {
         id: data.id
       })
-      console.log("the id is" + data.id)
-    })
-    
+    })    
  });
 
 

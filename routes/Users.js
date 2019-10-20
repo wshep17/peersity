@@ -89,6 +89,9 @@ router.post('/register', upload.single('profileimage'), async function(req, res,
   var accountId = "";
   var sentRequest = false;
   var pseudoAvailable = true;
+  var description = "";
+  var mailFrom = "";
+  var courseHelpReqst = "";
 
   if(req.file){
   	console.log('Uploading File...');
@@ -146,7 +149,10 @@ router.post('/register', upload.single('profileimage'), async function(req, res,
       tutorInUserState: tutorInUserState,
       accountId: accountId,
       sentRequest: sentRequest,
-      pseudoAvailable: pseudoAvailable
+      pseudoAvailable: pseudoAvailable,
+      description: description,
+      mailFrom: mailFrom,
+      courseHelpReqst: courseHelpReqst
     });
 
     User.createUser(newUser, function(err, user) {
@@ -166,11 +172,20 @@ router.post('/register', upload.single('profileimage'), async function(req, res,
 });
 
 router.get('/logout', function(req, res) {
-  db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: false}});
+  if (req.user.isTutor) {
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set: {tutorInUserState: true}});
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set: {isAvailable: false}});
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set : {pseudoAvailable: true}});
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set : {description: ""}});
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set : {mailFrom: ""}});
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set : {courseHelpReqst: ""}});
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set : {isRequested: false}});
+  } else {
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set: {room: ""}});
+    db.collection('DefaultUser').update({_id: req.user._id}, {$set : {courseHelpReqst: ""}});
+  }
   req.logout();
-  //req.flash('success', 'You are now logged out');
   res.redirect('/users/login');
-  db.collection('DefaultUser').update({_id: req.user._id}, {$set: {room: ""}});
 });
 
 module.exports = router;

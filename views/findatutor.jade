@@ -40,10 +40,10 @@ html(lang='en')
 							li
 								a.nav-link(href='/users/register',style="padding-left: 20px") Register
 				ul.navbar-nav
-					li
-						a.fa.fa-instagram(href='https://www.instagram.com/peersity_/')
-					li
-						a.fa.fa-twitter(href='https://twitter.com/peersity')
+					if user
+						.btn-group
+							a.btn.btn-danger(href='users/logout')
+								| Logout
 
 		.card.border-0.middle.p-3.mb-5.rounded.overflow-auto(style='width: 30rem;')
 			ul.list-group.list-group-flush

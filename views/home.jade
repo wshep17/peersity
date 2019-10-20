@@ -15,11 +15,8 @@ html(lang='en')
 
         //Background Look
         link(href='/stylesheets/background.css', rel='stylesheet')
-        link(href='/stylesheets/slider.css', rel='stylesheet')
         link(href='/stylesheets/home.css', rel='stylesheet')
 
-        //Socket Funcionality import
-        script(src="/socket.io/socket.io.js")
         title Peersity
 
 
@@ -47,22 +44,24 @@ html(lang='en')
                                 a.nav-link(href='users/login',style="padding-left: 20px") Login
                 ul.navbar-nav
                     if user
-                        li
-                            a.nav-link(href='users/logout',style="padding-left: 20px") Logout
+                        if (user.isRequested)
+                            .btn-group
+                                a.btn.btn-success(href='#', id='newNotification', style="margin-right: 20px;")
+                                    | New Notification &#10071
+                        else 
+                            div(id='notification', style = "display:none;")
+                                .btn-group
+                                    a.btn.btn-success(href='#', id='newNotification', style="margin-right: 20px;")
+                                        | New Notification &#10071
+                        .btn-group
+                            a.btn.btn-danger(href='users/logout')
+                                | Logout
+
+                             
+
 
         button#myButton.float-left.submit-button(onclick="location.href = 'http://localhost:6969/home/test';") Home
 
-
-
-        if (user.isTutor)
-
-
-            b(style = "text-align: center;")
-                if (user.isRequested)
-                    form(method='post', action='/home')
-                        input.btn.btn-primary(type='submit', name='isRequested', value = 'You have been requested', id = studentRequest)
-            button(type=submit, id='TutorAsUser') Set Status to User
-            button(type=submit, id='TutorAsTutor') Set Status to Tutor
 
       .card.border-0.middle(style='width: 30rem;')
         div(id="header")
@@ -74,10 +73,11 @@ html(lang='en')
                 .card-header(style="background-color: yellow; font-size: 20px; font-weight: 10")
                     | You have been requested &#10071
                 .card-body
-                    h5.card-title Math 1554
-                    p.card-text Q: What does it mean for something to be row equivalent?
+                    h5.course.card-title Course: #{user.courseHelpReqst}
+                    p.from.card-text From: #{user.mailFrom} 
+                    p.message.card-text Message: #{user.description}
                 .card-footer
-                    a.btn.btn-primary(id = 'accept', href='/chat', onclick = "javascript: form.action = '/chat';", style="background-color: green; border-color: green; float: left", class="w3-lobster") Accept
+                    a.btn.btn-primary(id = 'accept', href='#', onclick = "javascript: form.action = '/chat';", style="background-color: green; border-color: green; float: left", class="w3-lobster") Accept
                     a.btn.btn-primary(id = 'decline', href='#', style="background-color: red; border-color: red; float: right", class="w3-lobster") Decline
 
         div(id="original_panel")
@@ -115,6 +115,12 @@ html(lang='en')
         script(src="/socket.io/socket.io.js")
         script.
             var num = 0;
+            var socket = io.connect('http://localhost:6969');
+            $(document).ready(function() {
+                socket.on('notify', function() {
+                    document.getElementById('notification').style.display = "block";
+                })
+            })
             function activateNotification() {
                 document.getElementById('popup').style.display = "block";
                 document.getElementById('original_panel').style.display = "none";
@@ -126,7 +132,7 @@ html(lang='en')
             toggle.addEventListener("click", function (event) {
                 //socket phone compatability right below
                 //var socket = io.connect('http://192.168.43.117:6969');
-                var socket = io.connect('http://localhost:6969');
+                
                 var roomNumber = roomGenerator()
                 num = roomNumber;
                 console.log('The tutor is joining room ' + roomNumber)
@@ -151,11 +157,16 @@ html(lang='en')
                             console.log("CMON! nabbit, ya gotta issue with ur ajax request")
                         }
                     });
-                    socket.on('notify', function(data) {
-                        //We have access to some 'data' if we need it.
-                        activateNotification();
-                    })
-            })
+                })
+
+            //Incase the user does not have a notification button
+            try {
+                var notificationBtn = document.getElementById('newNotification');
+                notificationBtn.addEventListener("click", function(event) {
+                    activateNotification()
+                })
+            } catch(err){}
+
 
             //START-All JS code involving acceptedRequest
             var acceptBtn = document.getElementById('accept')
@@ -204,35 +215,6 @@ html(lang='en')
               }
               return room
             }
-
-
-
-            //start Tutor state setting here
-            var TutorAsTutor = document.getElementById("TutorAsTutor")
-            var TutorAsUser = document.getElementById("TutorAsUser")
-            TutorAsTutor.addEventListener('click', function() {
-            $.ajax({
-                url: 'http://localhost:6969/home/settingToTutor',
-                type: "POST",
-                contentType: "application/json",
-                error: function() {
-                    console.log("CMON! nabbit, ya gotta issue with ur ajax request")
-                }
-            });
-            })
-            TutorAsUser.addEventListener('click', function() {
-            $.ajax({
-                url: 'http://localhost:6969/home/settingToUser',
-                type: "POST",
-                contentType: "application/json",
-                error: function() {
-                    console.log("CMON! nabbit, ya gotta issue with ur ajax request")
-                }
-            });
-            })
-            //end tutor state setting
-            //onload check for stripe account id
-
 
 
 
