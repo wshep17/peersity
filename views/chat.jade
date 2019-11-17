@@ -18,8 +18,27 @@ html(lang='en',  id='HTML')
         title Peersity
 
 
-
-    body
+        // Firebase
+        script(src='https://www.gstatic.com/firebasejs/7.4.0/firebase-app.js')
+        // <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+        script(src='https://www.gstatic.com/firebasejs/7.4.0/firebase-database.js')
+        // CodeMirror and its JavaScript mode file
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css')
+        // Firepad
+        link(rel='stylesheet', href='https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css')
+        script(src='https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js')
+        style.
+          html { height: 100%; }
+          body { margin: 0; height: 100%; position: relative; }
+          /* Height / width / positioning can be customized for your use case.
+          For demo purposes, we make firepad fill the entire browser. */
+          #firepad-container {
+          width: 100%;
+          height: 100%;
+          }
+    body(onload='init()')
         nav.navbar.sticky-top.navbar-expand-md.bg-dark.navbar-dark
             a.navbar-brand(href='/', class="w3-lobster") Peersity
             button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNavDropdown', aria-controls='navbarNavDropdown', aria-expanded='false', aria-label='Toggle navigation')
@@ -121,6 +140,7 @@ html(lang='en',  id='HTML')
               button(id='send' value='Send') Send
             #controls
 
+
     script(src="/socket.io/socket.io.js")
     script.
         var socket = io.connect('http://localhost:6969')
@@ -132,5 +152,46 @@ html(lang='en',  id='HTML')
             document.getElementById('chatpage').style.display = "block";
             document.getElementById('waiting_screen').style.display = "none";
         })
+        function init() {
+        //// Initialize Firebase.
+        //// TODO: replace with your Firebase project configuration.
+        var config = {
+          apiKey: "AIzaSyCKpx6GgatAknV55PEc80fWZ5QonZ_9a3o",
+          authDomain: "peersity-5a16a.firebaseapp.com",
+          databaseURL: "https://peersity-5a16a.firebaseio.com",
+          projectId: "peersity-5a16a",
+          storageBucket: "peersity-5a16a.appspot.com",
+          messagingSenderId: "157406510234",
+          appId: "1:157406510234:web:303dc2e7fadf50a14fb323",
+          measurementId: "G-52KF3VD8QL"
+        };
+        firebase.initializeApp(config);
+        //// Get Firebase Database reference.
+        var firepadRef = getExampleRef();
+        //// Create CodeMirror (with line numbers and the JavaScript mode).
+        var codeMirror = CodeMirror(document.getElementById('bottom-div'), {
+        lineNumbers: true,
+        mode: 'javascript'
+        });
+        //// Create Firepad.
+        var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+        defaultText: '// JavaScript Editing with Firepad!\\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+        });
+        }
+        // Helper to get hash from end of URL or generate a random one.
+        function getExampleRef() {
+        var ref = firebase.database().ref();
+        var hash = window.location.hash.replace(/#/g, '');
+        if (hash) {
+        ref = ref.child(hash);
+        } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + '#' + '#{user.room}'; // add it as a hash to the URL.
+        }
+        if (typeof console !== 'undefined') {
+        console.log('Firebase data: ', ref.toString());
+        }
+        return ref;
+        }
     script(src="/javascripts/chatClient.js")
     script(src='/javascripts/bundle.js')
