@@ -33,46 +33,52 @@ window.addEventListener('load', function() {
       // console.log(data.userInfo.minutes)
       minutes = data.userInfo.minutes
       tutoring = data.userInfo.isTutor && !data.userInfo.tutorInUserState
+      if(minutes <= 0 && !tutoring) {
+        if (window.Notification && Notification.permission === "granted" && showOnce == 0) {
+          showOnce++
+          var notification = new Notification("Minutes are up!", {body: "Your minutes have expired. You will be redirected to the home page momentarily"});
+          setTimeout(function() {notification.close()}, 5000);
+        } else if(showOnce == 0) {
+          showOnce++
+          alert("Your minutes have expired. You will be redirected to the home page momentarily.")
+        }
+        //using leave btn functionality
+        //
+        var obj = {
+            minutes: minRemove
+        };
+        var URL = 'http://localhost:6969/chat'
+        var destination = 'http://localhost:6969/home'
+
+            $.ajax({
+                url: URL,
+                type: "POST",
+                data: JSON.stringify(obj),
+                contentType: "application/json",
+                success: function() {
+                  console.log("Successful")
+
+                },
+                error: function() {
+                    console.log("CMON! nabbit, ya gotta issue with ur ajax request")
+                }
+            });
+            /*using setTimeout keeps the socket from executing immediately after the condition is true, because when it executes immediately
+            it messes with the ajax request */
+            setTimeout(function() {socket.emit('leave', {handle: handle.value, destination: destination})}, 5000);//
+      //
+      }
       console.log('tutoring is ' + tutoring)
     }
   })
 })
 
-if(minutes <= 0 && !tutoring) {
-  if (window.Notification && Notification.permission === "granted" && showOnce == 0) {
-    showOnce++
-    var notification = new Notification("Minutes are up!", {body: "Your minutes have expired. You will be redirected to the home page momentarily"});
-    setTimeout(function() {notification.close()}, 5000);
-  } else if(showOnce == 0) {
-    showOnce++
-    alert("Your minutes have expired. You will be redirected to the home page momentarily.")
-  }
-  //using leave btn functionality
-  //
-  var obj = {
-      minutes: minRemove
-  };
-  var URL = 'http://localhost:6969/chat'
-  var destination = 'http://localhost:6969/home'
+var firepadDiv = document.getElementById('firepad');
+var firepadRef = firebase.database().ref();
+var codeMirror = CodeMirror(firepadDiv, { lineWrapping: true });
+var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
+    { richTextShortcuts: true, richTextToolbar: true });
 
-      $.ajax({
-          url: URL,
-          type: "POST",
-          data: JSON.stringify(obj),
-          contentType: "application/json",
-          success: function() {
-            console.log("Successful")
-
-          },
-          error: function() {
-              console.log("CMON! nabbit, ya gotta issue with ur ajax request")
-          }
-      });
-      /*using setTimeout keeps the socket from executing immediately after the condition is true, because when it executes immediately
-      it messes with the ajax request */
-      setTimeout(function() {socket.emit('leave', {handle: handle.value, destination: destination})}, 5000);//
-//
-}
 
 setInterval(function() {
   minutes--;
